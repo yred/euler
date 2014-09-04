@@ -28,9 +28,9 @@ def primes():
 
 
 def factorize(n):
-    if n > 1:
-        factors = []
+    factors = []
 
+    if n > 1:
         for p in primes():
             while n % p == 0:
                 factors.append(p)
