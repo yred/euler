@@ -27,24 +27,23 @@ def primes():
             yield n
 
 
-def largest_prime_factor(n):
-    factors = set()
+def factorize(n):
+    if n > 1:
+        factors = []
 
-    for p in primes():
-        if n % p == 0:
-            factors.add(p)
-
+        for p in primes():
             while n % p == 0:
+                factors.append(p)
                 n = n / p
 
-        if n == 1:
-            break
+            if n == 1:
+                break
 
-    return max(factors)
+    return factors
 
 
 def solution():
-    return largest_prime_factor(600851475143)
+    return max(factorize(600851475143))
 
 
 if __name__ == '__main__':
