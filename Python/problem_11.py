@@ -90,8 +90,8 @@ def solution():
         01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48
     '''.strip().split('\n'))
 
-    chains = rows + get_columns(rows) + get_diagonals(rows)
-    g4s = (g4 for chain in chains for g4 in get_groups(chain, 4) if g4)
+    sequences = rows + get_columns(rows) + get_diagonals(rows)
+    g4s = (g4 for seq in sequences for g4 in get_groups(seq, 4) if g4)
 
     return max(reduce(operator.mul, g4) for g4 in g4s)
 
