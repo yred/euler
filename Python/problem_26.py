@@ -28,7 +28,8 @@ from decimal import Decimal, getcontext
 # unlikely to be part of any recurring cycle
 SKIP = 100
 
-# Chosen precision = skip + 2*upper bound on cycle length (guesstimate)
+# Chosen precision = skip + 2*upper bound on cycle length
+# (For more info, visit:  http://mathworld.wolfram.com/DecimalExpansion.html)
 PRECISION = getcontext().prec = SKIP + 2*1000
 
 
