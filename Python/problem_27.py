@@ -65,6 +65,7 @@ def get_max_consecutive_primes(a, b, starting_index):
 
 
 def solution():
+    # Takes into account Euler's results
     best = (1, 41)
     best_found = 40
 
