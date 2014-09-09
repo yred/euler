@@ -2,6 +2,29 @@ from itertools import count
 from math import sqrt
 
 
+def memoize(func):
+    """
+    Returns a memoized version of `func`, where `func` is a function that
+    accepts a single, hashable argument
+    """
+    data = {}
+
+    def wrapped(arg):
+        if arg not in data:
+            data[arg] = func(arg)
+
+        return data[arg]
+
+    return wrapped
+
+
+def gcd(a, b):
+    while b != 0:
+        a, b = b, a % b
+
+    return a
+
+
 def is_prime(n):
     if n <= 1:
         return False
