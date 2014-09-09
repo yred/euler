@@ -11,8 +11,8 @@ the row below, the maximum total from top to bottom is 23.
 
 That is, 3 + 7 + 4 + 9 = 23.
 
-Find the maximum total from top to bottom in resources/p067_triangle.txt, a 15K
-text file containing a triangle with one-hundred rows.
+Find the maximum total from top to bottom in ../resources/p067_triangle.txt, a
+15K text file containing a triangle with one-hundred rows.
 """
 
 
@@ -49,7 +49,7 @@ def find_minimal_cost(rows):
 
 
 def solution():
-    with open('resources/p067_triangle.txt') as f:
+    with open('../resources/p067_triangle.txt') as f:
         rows = map(lambda line: map(int, line.strip().split()), f.readlines())
 
     best, hollowed = hollow(rows)

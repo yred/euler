@@ -12,8 +12,8 @@ alphabetical position and adding these values we form a word value. For
 example, the word value for SKY is 19 + 11 + 25 = 55 = t(10). If the word value
 is a triangle number then we shall call the word a triangle word.
 
-Using resources/p042_words.txt, a 16K text file containing nearly two-thousand
-common English words, how many are triangle words?
+Using ../resources/p042_words.txt, a 16K text file containing nearly
+two-thousand common English words, how many are triangle words?
 """
 from itertools import count, takewhile
 
@@ -31,7 +31,7 @@ def triangles():
 
 
 def solution():
-    with open('resources/p042_words.txt') as f:
+    with open('../resources/p042_words.txt') as f:
         words = [w[1:-1] for w in f.read().split(',')]
 
     max_value = 26*max(len(w) for w in words)
