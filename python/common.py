@@ -54,3 +54,22 @@ def divisors(n):
             ds.add(n/i)
 
     return list(sorted(ds))
+
+
+def pentagonal(n):
+    """Returns the pentagonal number corresponding to the integer n"""
+    return n*(3*n - 1)/2
+
+
+def is_pentagonal(n):
+    """Returns True if n is a pentagonal number"""
+    return n == pentagonal(int(sqrt(n*2 / 3)) + 1)
+
+
+def pentagonals(start=1):
+    """
+    Makes an iterator that returns all pentagonal numbers, optionally starting
+    at the provided index.
+    """
+    for i in count(start):
+        yield pentagonal(i)
