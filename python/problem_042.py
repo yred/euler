@@ -2,7 +2,7 @@
 """
 Problem 42 - Coded triangle numbers
 
-The nth term of the sequence of triangle numbers is given by, t(n) = ½n(n+1);
+The n-th term of the sequence of triangle numbers is given by, t(n) = ½n(n+1);
 so the first ten triangle numbers are:
 
         1, 3, 6, 10, 15, 21, 28, 36, 45, 55, ...
@@ -12,10 +12,12 @@ alphabetical position and adding these values we form a word value. For
 example, the word value for SKY is 19 + 11 + 25 = 55 = t(10). If the word value
 is a triangle number then we shall call the word a triangle word.
 
-Using ../resources/p042_words.txt, a 16K text file containing nearly
+Using "../resources/p042_words.txt", a 16K text file containing nearly
 two-thousand common English words, how many are triangle words?
 """
-from itertools import count, takewhile
+from itertools import takewhile
+
+from common import triangles
 
 
 A = ord('A') - 1
@@ -23,11 +25,6 @@ A = ord('A') - 1
 
 def word_value(s):
     return sum(map(lambda c: ord(c) - A, s))
-
-
-def triangles():
-    for n in count(1):
-        yield n*(n+1)/2
 
 
 def solution():

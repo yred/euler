@@ -19,6 +19,7 @@ def memoize(func):
 
 
 def gcd(a, b):
+    """Returns the greatest common divisor of a and b"""
     while b != 0:
         a, b = b, a % b
 
@@ -37,6 +38,7 @@ def is_prime(n):
 
 
 def primes():
+    """Makes an iterator that returns *all* primes numbers"""
     yield 2
 
     for n in count(3, 2):
@@ -54,6 +56,15 @@ def divisors(n):
             ds.add(n/i)
 
     return list(sorted(ds))
+
+
+def triangles(start=1):
+    """
+    Makes an iterator that returns all triangle numbers, optionally starting
+    at the provided index.
+    """
+    for n in count(start):
+        yield n*(n+1)/2
 
 
 def pentagonal(n):
