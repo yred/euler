@@ -14,24 +14,24 @@ Find the pair of pentagonal numbers, P(j) and P(k), for which their sum and
 difference are pentagonal and D = |P(k) − P(j)| is minimised. What is the value
 of D?
 """
-from itertools import combinations, count
+from itertools import combinations
 
 from common import pentagonals
 
 
 def solution():
-    # Guesstimate for the size of the initial space to be covered
-    base = 1000
+    # Guesstimate for the number of pentagonals that will have to be chcked
+    count = 1000
 
-    for _ in count(1):
-        pcombinations = combinations(pentagonals[:base], 2)
+    while True:
+        pcombinations = combinations(pentagonals[:count], 2)
 
         for d, pi in sorted((pj - pi, pi) for pi, pj in pcombinations):
             if d in pentagonals and d + 2*pi in pentagonals:
                 return d
 
         # Triple the number of pentagonals to be checked on the next iteration
-        base *= 3
+        count *= 3
 
 
 if __name__ == '__main__':

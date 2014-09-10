@@ -17,6 +17,8 @@ from common import triangles, pentagonals, hexagonals
 
 
 def solution():
+    # H increases faster than P and T, which ensures less checks -- i.e.,
+    # a faster solution
     for h in hexagonals[143:]:
         if h in triangles and h in pentagonals:
             return h
