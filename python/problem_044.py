@@ -20,7 +20,7 @@ from common import pentagonals
 
 
 def solution():
-    # Guesstimate for the number of pentagonals that will have to be chcked
+    # Guesstimate for the number of pentagonals that will have to be checked
     count = 1000
 
     while True:
