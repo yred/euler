@@ -32,7 +32,7 @@ def solution():
         words = [w[1:-1] for w in f.read().split(',')]
 
     max_value = 26*max(len(w) for w in words)
-    bounded_t = set(takewhile(lambda t: t <= max_value, triangles()))
+    bounded_t = set(takewhile(lambda t: t <= max_value, iter(triangles)))
 
     return len([1 for word in words if word_value(word) in bounded_t])
 
