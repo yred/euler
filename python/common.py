@@ -1,5 +1,5 @@
 from itertools import count, islice
-from math import sqrt
+from math import sqrt, factorial
 
 
 def memoize(func):
@@ -56,6 +56,14 @@ def divisors(n):
             ds.add(n/i)
 
     return list(sorted(ds))
+
+
+def ncr(n, r):
+    """Returns the number of r-element subsets chosen from an n-element set"""
+    if r > n:
+        raise ValueError('r must be less than %d in ncr(%d, %d)' % (n, n, r))
+
+    return factorial(n)/factorial(r)/factorial(n-r)
 
 
 class Numbers(object):
