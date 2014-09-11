@@ -102,9 +102,12 @@ class Hand(object):
         self.rank = self._compute_rank()
 
     def _compute_rank(self):
+        """Returns the rank and associated value of the poker hand"""
         for _, count in self.scounter.most_common(1):
             if count == 5:
                 if self.values[0] == 10:
+                    # In the case of a royal flush, an associated value has no
+                    # real meaning
                     return ROYAL, None
                 elif self.values[-1] - self.values[0] == 4:
                     return SFLUSH, self.values[-1]
@@ -121,11 +124,14 @@ class Hand(object):
                     return THREE, value
             elif count == 2:
                 if self.vcounter.most_common()[1][1] == 2:
+                    # Return the maximum value of both available pairs as the
+                    # associated value
+                    # (Note: can also be directly returned via self.values[-2])
                     return DPAIR, max(value, self.vcounter.most_common()[1][0])
                 else:
                     return PAIR, value
 
-        if tuple(v - self.values[0] for v in self.values) == (0, 1, 2, 3, 4):
+        if all(self.values[i+1] - self.values[i] == 1 for i in range(4)):
             return STRAIGHT, self.values[-1]
 
         return HI, self.values[-1]

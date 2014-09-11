@@ -8,11 +8,9 @@ There are exactly ten ways of selecting three from five, 12345:
 
 In combinatorics, we use the notation, 5C3 = 10.
 
-In general:
+In general,
 
-        nCr = n! / r!(n−r)!
-
-    where r ≤ n, n! = n×(n−1)×...×3×2×1, and 0! = 1.
+    nCr = n! / r!(n−r)!  --  where r ≤ n, n! = n×(n−1)×...×3×2×1, and 0! = 1
 
 It is not until n = 23, that a value exceeds one-million: 23C10 = 1144066.
 
