@@ -26,9 +26,9 @@ def spiral_diagonals():
     spiral = count(2)
     skip = 1
 
-    for _ in count(1):
+    while True:
         for _ in range(4):
-            yield list(islice(spiral, skip, skip+1))[0]
+            yield next(islice(spiral, skip, skip+1))
 
         skip += 2
 
