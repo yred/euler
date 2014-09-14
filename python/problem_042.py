@@ -17,7 +17,7 @@ two-thousand common English words, how many are triangle words?
 """
 from itertools import takewhile
 
-from common import triangles
+from common.sequences import triangles
 
 
 A = ord('A') - 1

@@ -13,7 +13,7 @@ It can be verified that T(285) = P(165) = H(143) = 40755.
 
 Find the next triangle number that is also pentagonal and hexagonal.
 """
-from common import triangles, pentagonals, hexagonals
+from common.sequences import triangles, pentagonals, hexagonals
 
 
 def solution():
