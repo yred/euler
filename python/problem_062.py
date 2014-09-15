@@ -16,12 +16,23 @@ from itertools import count
 def solution():
     cubes = defaultdict(list)
 
+    length = 0
+
     for n in count(1):
         key = tuple(sorted(str(n**3)))
-        cubes[key].append(n)
 
-        if len(cubes[key]) == 5:
-            return min(cubes[key])**3
+        # When cubes (or cube keys) become "longer", check if any of the
+        # current cubes meet the permutation requirements. If not, clear all
+        # stored cubes
+        if len(key) > length:
+            for k, cs in cubes.items():
+                if len(cs) == 5:
+                    return k, cs
+
+            length = len(key)
+            cubes.clear()
+
+        cubes[key].append(n)
 
 
 if __name__ == '__main__':
