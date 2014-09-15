@@ -11,6 +11,7 @@ cube.
 """
 from collections import defaultdict
 from itertools import count
+from operator import itemgetter
 
 
 def solution():
@@ -25,7 +26,7 @@ def solution():
         # current cubes meet the permutation requirements. If not, clear all
         # stored cubes
         if len(key) > length:
-            for k, cs in cubes.items():
+            for k, cs in sorted(cubes.items(), key=itemgetter(1)):
                 if len(cs) == 5:
                     return min(cs)**3
 
