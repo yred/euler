@@ -27,7 +27,7 @@ def solution():
         if len(key) > length:
             for k, cs in cubes.items():
                 if len(cs) == 5:
-                    return k, cs
+                    return min(cs)**3
 
             length = len(key)
             cubes.clear()
