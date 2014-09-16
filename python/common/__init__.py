@@ -73,8 +73,20 @@ def divisors(n):
 
 
 def ncr(n, r):
-    """Returns the number of r-element subsets chosen from an n-element set"""
+    """
+    Returns the number of r-element combinations chosen from an n-element set
+    """
     if r > n:
         raise ValueError('r must be less than %d in ncr(%d, %d)' % (n, n, r))
 
     return factorial(n)/factorial(r)/factorial(n-r)
+
+
+def npr(n, r):
+    """
+    Returns the number of r-element permutations chosen from an n-element set
+    """
+    if r > n:
+        raise ValueError('r must be less than %d in npr(%d, %d)' % (n, n, r))
+
+    return factorial(n)/factorial(n-r)
