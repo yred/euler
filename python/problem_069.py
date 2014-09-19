@@ -45,12 +45,13 @@ def solution():
     plist = list(primes_up_to(limit))
 
     # Initialize a dict to hold the totient values of all integers up to
-    # `limit`, starting with those of primes numbers and their powers
+    # `limit`, starting with those of primes and their powers
     phi = {p**k: (p**(k-1)) * (p - 1)
            for p in plist for k in range(1, int(log(limit, p)) + 1)}
 
     for n in range(2, limit+1):
         if n not in phi:
+            # Uses the fact that φ(a*b) = φ(a)*φ(b) when gcd(a, b) = 1
             phi[n] = reduce(lambda v, t: v * phi[t[0]**len(list(t[1]))],
                             groupby(factors(n, plist)), 1)
 
