@@ -16,7 +16,7 @@ of D?
 """
 from itertools import combinations
 
-from common import pentagonals
+from common.sequences import pentagonals
 
 
 def solution():
