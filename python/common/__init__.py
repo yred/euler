@@ -92,8 +92,6 @@ def npr(n, r):
     return factorial(n)/factorial(n-r)
 
 
-def sum_digits(n):
-    """
-    Returns the sum of the digits of n
-    """
-    return sum(map(int, str(n)))
+def digits(n):
+    """Returns the digits of n"""
+    return map(int, str(n))

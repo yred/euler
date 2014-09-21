@@ -38,7 +38,7 @@ continued fraction for e.
 """
 from fractions import Fraction
 
-from common import sum_digits
+from common import digits
 
 
 def e_fraction_term(index):
@@ -72,7 +72,7 @@ def solution():
     # The 100th convergent of e
     e100 = 2 + e_frac
 
-    return sum_digits(e100.numerator)
+    return sum(digits(e100.numerator))
 
 
 if __name__ == '__main__':
