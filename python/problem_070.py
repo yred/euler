@@ -39,10 +39,6 @@ def factors(n, primes):
         yield n, 1
 
 
-def is_permutation(a, b):
-    return sorted
-
-
 def solution():
     limit = 10**7
 
