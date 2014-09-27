@@ -11,12 +11,13 @@ rectangles, find the area of the grid with the nearest solution.
 from itertools import count, dropwhile
 
 
-def rectangles(l, w):
+def rectangles(length, width):
     """
-    Returns the number of rectangles contained within a rectangle of length `l`
-    and width `w`
+    Returns the number of rectangles contained within a rectangle of the
+    provided dimensions
     """
-    return sum((l-a)*(w-b) for a in range(l) for b in range(w))
+    return sum((length - l)*(width - w)
+               for l in range(length) for w in range(width))
 
 
 def solution():
