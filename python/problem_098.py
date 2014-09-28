@@ -26,14 +26,14 @@ def positions(word):
     Returns a dictionary mapping each distinct character in `word` to a list of
     its positions
     """
-    positions = defaultdict(list)
+    index = defaultdict(list)
 
-    for idx, c in enumerate(word):
+    for i, c in enumerate(word):
         # Inserts indices at the beginning of the list so that they can later
         # be "popped" in insertion order
-        positions[c].insert(0, idx)
+        index[c].insert(0, i)
 
-    return positions
+    return index
 
 
 def permuter(original, anagram):
