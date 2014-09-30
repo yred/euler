@@ -1,4 +1,4 @@
-from itertools import count, islice
+from itertools import count
 from math import sqrt, factorial
 
 
