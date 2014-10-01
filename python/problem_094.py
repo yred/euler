@@ -18,7 +18,7 @@ from math import sqrt
 
 def is_square(n):
     """Returns `True` if n is a perfect square"""
-    return n == int(sqrt(n))**2
+    return n == int(sqrt(n) + 0.5)**2
 
 
 def solution():
