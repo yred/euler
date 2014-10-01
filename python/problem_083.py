@@ -22,10 +22,9 @@ left, right, up, and down.
 
 class Cell(object):
 
-    def __init__(self, cost, best, predecessor):
+    def __init__(self, cost, best):
         self.cost = cost
         self.best = best
-        self.pred = predecessor
 
     def update(self, other):
         """
@@ -34,7 +33,6 @@ class Cell(object):
         """
         if self.best > other.best + self.cost:
             self.best = other.best + self.cost
-            self.pred = other
             return True
 
         return False
@@ -53,7 +51,7 @@ def solution():
     # Upper bound on the path sum
     maxpath = sum(cost for row in matrix for cost in row)
 
-    cells = {(i, j): Cell(cost=matrix[i][j], best=maxpath, predecessor=None)
+    cells = {(i, j): Cell(cost=matrix[i][j], best=maxpath)
              for i in range(maxrow+1) for j in range(maxcol+1)}
 
     # Correct the best estimate for the first cell
