@@ -46,7 +46,7 @@ def solution():
                 return a, cuboids
 
         # Double the number of available squares
-        start, limit = limit, 2*limit - start
+        start, limit = limit, len(squares) + limit
         squares |= set(takewhile(lambda n: n < 5*(limit**2),
                                  (i*i for i in count(start))))
 
