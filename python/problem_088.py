@@ -37,8 +37,8 @@ from common import divisors, primes_up_to
 
 
 def product_sums(limit):
-    """Returns a dictionary mapping (sequence) lengths to product-sum tuples
-    """
+    """Returns a dictionary mapping (sequence) lengths to product-sum tuples"""
+
     # Since primes can't be expressed in terms of any interesting products,
     # they're collected now to be rapidly skipped later
     primes = set(primes_up_to(limit))
