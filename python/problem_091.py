@@ -21,15 +21,15 @@ from itertools import product, starmap
 
 def slope(A, B):
     """Returns the slope of the line defined by the points A and B"""
-    return (A.x - B.x)*1.0 / (A.y - B.y)
+    return (A.y - B.y)*1.0 / (A.x - B.x)
 
 
 def is_triangle(A, B, C):
     """Returns `True` if the points A, B and C are non-collinear"""
-    if B.y - A.y and C.y - A.y:
+    if B.x - A.x and C.x - A.x:
         return slope(A, B) != slope(A, C)
     else:
-        return B.y - A.y != C.y - A.y
+        return B.x - A.x != C.x - A.x
 
 
 def is_right(A, B, C):
