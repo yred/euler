@@ -20,8 +20,9 @@ from itertools import count
 from common import digits
 
 
-def is_pandigital(ns):
-    return set(ns) == set(range(1, 10))
+def is_pandigital(ds):
+    """Returns `True` if the sequence of digits `ds` contains the digits 1-9"""
+    return set(ds) == set(range(1, 10))
 
 
 def ends(n, first, last):
@@ -49,7 +50,7 @@ def solution():
     for _ in range(3, 2749):
         a, b = b, a+b
 
-    # Since fibonacci numbers are a few hundred digits long at this point,
+    # Since Fibonacci numbers are a few hundred digits long at this point,
     # computing the next numbers in the sequence will take increasingly more
     # time. Only keeping the leading and trailing digits of the last 2
     # Fibonacci numbers should be sufficient for checking for pandigitals at
