@@ -72,10 +72,12 @@ def solution():
         prevset = osets[n-1]
         leading = prevset[len(prevset)/2]
 
-        best = heuristic = [leading] + [leading + e for e in prevset]
+        # Use the algorithm described in the problem statement to produce a
+        # near optimum set
+        best = [leading] + [leading + e for e in prevset]
 
         min_second = leading + 1
-        max_second = (sum(heuristic) - leading) / (n-1)
+        max_second = (sum(best) - leading) / (n-1)
 
         # Possible elements besides the first/leading element. The limit on the
         # last element is derived from the properties of special sum sets, and

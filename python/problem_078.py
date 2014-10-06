@@ -22,14 +22,19 @@ from itertools import count
 def solution():
     modulus = 10**6
 
-    # Initializing the list of the number of partitions: partitions[i] = p(i)
+    # Initializing the list of the number of partitions, where:
+    #
+    #           p(i) ≡ partitions[i] (mod modulus)
+    #
     partitions = [1, 1]
 
     for n in count(2):
         # The number of partitions of n, p(n), is computed using the pentagonal
         # number recursion formula:
         #
-        #   P(n) = Σ(-1)^k+1 * [P(n - k(3k-1)/2) + P(n - k(3k+1)/2)]   (k=1..n)
+        #   p(n) = Σ(-1)^k+1 * [p(n - k(3k-1)/2) + p(n - k(3k+1)/2)]   (k=1..n)
+        #
+        # where p(i) = 0 for all i < 0
         #
         # source:
         #   http://www.had2know.com/academics/integer-partition-calculator.html
@@ -40,6 +45,7 @@ def solution():
             fst = k*(3*k - 1)/2
             snd = k*(3*k + 1)/2
 
+            # All remaining terms are null if `fst` is greater than `n`
             if fst > n:
                 break
 
@@ -51,6 +57,7 @@ def solution():
         if (p_n % modulus) == 0:
             return n
         else:
+            # Only keep track of the last (and in this case, meaningful) digits
             partitions.append(p_n % modulus)
 
 
