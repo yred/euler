@@ -43,6 +43,7 @@ def downsize(smaller, larger, length=30):
 
 
 def solution():
+    # The first 2 elements of the Fibonacci sequence
     a, b, = 1, 1
 
     # Using the problem statement, it should be safe to skip over Fibonacci
