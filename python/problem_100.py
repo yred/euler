@@ -37,11 +37,10 @@ def solution():
     # where X = 4*y - 2 and Y = 2*x - 1
     #
     for X, Y in diophantine_solutions(8, -4):
-        blue = (Y+1) / 2
-        combined = (X+2) / 4
-
-        if combined >= threshold:
-            return blue
+        # If the total number of discs is greater than the threshold...
+        if (X+2) / 4 >= threshold:
+            # Return the number of blue discs
+            return (Y+1) / 2
 
 
 if __name__ == '__main__':
