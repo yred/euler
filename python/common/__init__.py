@@ -95,3 +95,28 @@ def npr(n, r):
 def digits(n):
     """Returns the digits of n"""
     return map(int, str(n))
+
+
+def multicount(start, *steps):
+    """
+    A modified version of itertools.count() that adds support for unevenly
+    spaced values
+
+    >>> zip(range(7), multicount(10, 1, 3, 10))
+    [(0, 10), (1, 11), (2, 13), (3, 20), (4, 21), (5, 23), (6, 30)]
+
+    >>> zip(range(5), multicount(100, 25, 100))
+    [(0, 100), (1, 125), (2, 200), (3, 225), (4, 300)]
+    """
+    steps = sorted(steps) or [1]
+
+    for n in count(start, steps[-1]):
+        yield n
+
+        for step in steps[:-1]:
+            yield n + step
+
+
+def is_square(n):
+    """Returns `True` if n is a perfect square"""
+    return int(sqrt(n) + 0.5)**2 == n

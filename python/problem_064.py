@@ -48,44 +48,13 @@ Exactly four continued fractions, for N ≤ 13, have an odd period.
 
 How many continued fractions for N ≤ 10000 have an odd period?
 """
-from fractions import Fraction
-from math import sqrt
-
-
-def get_sqrt_period(n):
-    """
-    Returns the period of the continued fraction of the square root of `n`
-    """
-    # Skip perfect squares
-    if int(sqrt(n))**2 == n:
-        return []
-
-    # Iterate until the period is found, using the process outlined in the
-    # problem statement:
-    #       a_i = ...,      numer/(sqrt(n) - denomr) = ... = a_i+1 + ...
-    a0 = int(sqrt(n))
-    numer = 1
-    denomr = a0
-
-    aseq = [a0]
-    fracs = [(numer, denomr)]
-
-    while True:
-        f = Fraction(numer, n - denomr**2)
-
-        # Calculate and append `a`
-        aseq.append(int(f*(sqrt(n) + denomr)))
-
-        frac = numer, denomr = f.denominator, f.denominator*aseq[-1] - denomr
-
-        if frac in fracs:
-            return aseq[fracs.index(frac) + 1:]
-        else:
-            fracs.append(frac)
+from common import is_square
+from common.diophantine import continued_fraction
 
 
 def solution():
-    return sum(1 for n in range(1, 10000) if len(get_sqrt_period(n)) % 2 == 1)
+    return sum(len(continued_fraction(n)[1]) % 2 for n in range(1, 10000)
+               if not is_square(n))
 
 
 if __name__ == '__main__':
