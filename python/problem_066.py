@@ -31,10 +31,8 @@ from common.diophantine import diophantine_solutions
 
 
 def solution():
-    # Filter out perfect squares
-    dvals = filter(lambda n: not is_square(n), range(1, 1001))
-
-    return max((next(diophantine_solutions(d, 1))[0], d) for d in dvals)[1]
+    return max((next(diophantine_solutions(d, 1))[0], d)
+               for d in range(1, 1001) if not is_square(d))[1]
 
 
 if __name__ == '__main__':
