@@ -72,6 +72,30 @@ def divisors(n):
     return list(sorted(ds))
 
 
+def idivisors(n):
+    """Yields the sorted divisors of `n`"""
+    isqrtn = int(sqrt(n))
+
+    for i in xrange(1, isqrtn):
+        if n % i == 0:
+            yield i
+
+    if n % isqrtn == 0:
+        yield isqrtn
+
+        if isqrtn != n/isqrtn:
+            yield n/isqrtn
+
+    for i in xrange(isqrtn-1, 0, -1):
+        if n % i == 0:
+            yield n/i
+
+
+def product(ns):
+    """Returns the product of the sequence `ns`"""
+    return reduce(lambda a, b: a*b, ns, 1)
+
+
 def ncr(n, r):
     """
     Returns the number of r-element combinations chosen from an n-element set
