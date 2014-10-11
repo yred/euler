@@ -84,8 +84,8 @@ def numbers(digit, times, length):
 def solution():
     length = 10
 
-    # Only primes up to sqrt(10**length) are required to test the
-    # `length`-digit numbers primality
+    # Only primes up to sqrt(10**length) are required to test the primality of
+    # `length`-digit numbers
     primes = list(primes_up_to(int((10 ** (length/2.0)))))
 
     # dprimes[d] is the set of primes where `d` is repeated M(length, d) times
@@ -109,7 +109,7 @@ def solution():
             if digit in dprimes:
                 break
 
-    return sum(sum(nums) for _, nums in dprimes.items())
+    return sum(map(sum, dprimes.values()))
 
 
 if __name__ == '__main__':
