@@ -4,16 +4,17 @@ from math import sqrt, factorial
 
 def memoize(func):
     """
-    Returns a memoized version of `func`, where `func` is a function that
-    accepts a single, hashable argument
+    Returns a memoized version of `func`
     """
     data = {}
 
-    def wrapped(arg):
-        if arg not in data:
-            data[arg] = func(arg)
+    def wrapped(*args):
+        key = tuple(args)
 
-        return data[arg]
+        if key not in data:
+            data[key] = func(*args)
+
+        return data[key]
 
     return wrapped
 
@@ -30,7 +31,7 @@ def is_prime(n):
     if n <= 1:
         return False
 
-    for i in range(2, int(sqrt(n)) + 1):
+    for i in xrange(2, int(sqrt(n)) + 1):
         if n % i == 0:
             return False
 

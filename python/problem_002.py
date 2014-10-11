@@ -11,21 +11,7 @@ four million, find the sum of the even-valued terms.
 """
 from itertools import count, takewhile
 
-
-def memoize(func):
-    """
-    Returns a memoized version of `func`, where `func` is a function that
-    accepts a single argument
-    """
-    data = {}
-
-    def wrapped(arg):
-        if arg not in data:
-            data[arg] = func(arg)
-
-        return data[arg]
-
-    return wrapped
+from common import memoize
 
 
 @memoize

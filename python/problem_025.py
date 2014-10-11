@@ -27,21 +27,7 @@ What is the first term in the Fibonacci sequence to contain 1000 digits?
 """
 from itertools import count, dropwhile
 
-
-def memoize(func):
-    """
-    Returns a memoized version of `func`, where `func` is a function that
-    accepts a single argument
-    """
-    data = {}
-
-    def wrapped(arg):
-        if arg not in data:
-            data[arg] = func(arg)
-
-        return data[arg]
-
-    return wrapped
+from common import memoize
 
 
 @memoize
