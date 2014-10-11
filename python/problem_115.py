@@ -35,6 +35,11 @@ def combinations(length, minimum):
     be filled with blocks of at least `minimum` units, and in which every 2
     adjacent blocks must be separated by at least 1 unit
     """
+    # The cutoff point is -1 instead of 0 to account for blocks that are at the
+    # "right" edge/end of the row
+    if length < -1:
+        return 0
+
     # The 1 on the left accounts for the "empty" combination
     return 1 + sum(idx*combinations(length - (l+1), minimum)
                    for idx, l in enumerate(range(minimum, length+1), start=1))
