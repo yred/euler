@@ -51,7 +51,7 @@ def primes_up_to(limit):
     """Returns a list of all primes up to `limit`"""
     yield 2
 
-    sieve = set(range(1, (limit - 1)/2 + 1))
+    sieve = set(range(1, (limit + 1)/2))
 
     for j in range(1, int(sqrt(limit/2)) + 1):
         for i in range(1, (limit - j)/(1 + 2*j) + 1):
