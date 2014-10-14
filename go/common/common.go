@@ -63,3 +63,13 @@ func IsPalindrome(str string) bool {
 	}
 	return true
 }
+
+func Product(nums []int) int {
+	product := 1
+
+	for _, n := range nums {
+		product *= n
+	}
+
+	return product
+}
