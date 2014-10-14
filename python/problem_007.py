@@ -6,13 +6,13 @@ the 6th prime is 13.
 
 What is the 10001st prime number?
 """
-import itertools
+from itertools import islice
 
-import common
+from common import primes
 
 
 def solution():
-    return list(itertools.islice(common.primes(), 10000, 10001))[0]
+    return next(islice(primes(), 10000, None))
 
 
 if __name__ == '__main__':
