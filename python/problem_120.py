@@ -14,7 +14,7 @@ from itertools import count
 
 def maxrem(a):
     """
-    Returns the maximum remainder r_max, where for any natural numbers n:
+    Returns the maximum remainder r_max, where for any natural number n:
 
                 r ≡ (a−1)^n + (a+1)^n mod a²
     """

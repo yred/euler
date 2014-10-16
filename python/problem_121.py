@@ -28,8 +28,8 @@ from common import product
 
 def winning_probability(turns):
     """
-    Returns the probability of the player winning the game, by choosing more
-    blue discs in a game of `turns` turns
+    Returns the probability of a player winning the game, by choosing more blue
+    than red discs in a game of `turns` turns
     """
     blues = [Fraction(1, 2+i) for i in range(turns)]
 
