@@ -3,9 +3,7 @@ from math import sqrt, factorial
 
 
 def memoize(func):
-    """
-    Returns a memoized version of `func`
-    """
+    """Returns a memoized version of `func`"""
     data = {}
 
     def wrapped(*args):

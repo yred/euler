@@ -27,13 +27,13 @@ func main() {
 }
 
 func Solution() int {
-	max, maxN := 0, 0
+	maxLen, maxN := 0, 0
 
 	for i := 1; i < 1000000; i++ {
 		length := collatzLength(i)
 
-		if max < length {
-			max, maxN = length, i
+		if maxLen < length {
+			maxLen, maxN = length, i
 		}
 	}
 
