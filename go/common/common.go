@@ -44,6 +44,31 @@ func GCD(a, b int) int {
 	return a
 }
 
+// Returns the sorted list of the divisors of n
+func Divisors(n int) []int {
+	maxIterations := int(math.Sqrt(float64(n)))
+
+	maxDivs := 2 * maxIterations
+	divisors := make([]int, maxDivs)
+
+	// Forward and back indexes
+	fIndex, bIndex := 0, 0
+
+	for d := 1; d <= maxIterations; d++ {
+		if n%d == 0 {
+			divisors[fIndex] = d
+			fIndex++
+
+			if d != n/d {
+				divisors[maxDivs-bIndex-1] = n / d
+				bIndex++
+			}
+		}
+	}
+
+	return append(divisors[:fIndex], divisors[maxDivs-bIndex:]...)
+}
+
 // Originally from:
 //   http://stackoverflow.com/questions/1752414/how-to-reverse-a-string-in-go
 func ReverseString(str string) string {
