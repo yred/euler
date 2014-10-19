@@ -19,24 +19,21 @@ Which starting number, under one million, produces the longest chain?
 
 NOTE: Once the chain starts the terms are allowed to go above one million.
 """
+from common import memoize
 
 
+@memoize
 def collatz_length(n):
-    length = 1
-
-    while n != 1:
-        if n % 2 == 0:
-            n /= 2
-        else:
-            n = 3*n + 1
-
-        length += 1
-
-    return length
+    if n == 1:
+        return 1
+    elif n % 2 == 0:
+        return 1 + collatz_length(n/2)
+    else:
+        return 1 + collatz_length(3*n + 1)
 
 
 def solution():
-    return reduce(max, ((collatz_length(n), n) for n in range(1, 1000000)))[1]
+    return reduce(max, ((collatz_length(n), n) for n in xrange(1, 1000000)))[1]
 
 
 if __name__ == '__main__':
