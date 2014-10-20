@@ -101,13 +101,16 @@ func Product(nums []int) int {
 }
 
 func Factorial(n int) *big.Int {
-	result := big.NewInt(1)
-	for i := 1; i <= n; i++ {
-		result.Mul(result, big.NewInt(int64(i)))
-	}
-	return result
+	return big.NewInt(0).MulRange(1, int64(n))
 }
 
 func Permutations(whole int, part int) *big.Int {
 	return big.NewInt(0).Div(Factorial(whole), Factorial(part))
+}
+
+func SumDigits(str string) (sum int) {
+	for i := 0; i < len(str); i++ {
+		sum += int(byte(str[i]) - '0')
+	}
+	return
 }
