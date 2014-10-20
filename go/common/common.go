@@ -2,6 +2,7 @@ package common
 
 import (
 	"math"
+	"math/big"
 )
 
 func PrimesUpTo(limit int) (primes []int) {
@@ -97,4 +98,21 @@ func Product(nums []int) int {
 	}
 
 	return product
+}
+
+func Factorial(n int) *big.Int {
+	result := big.NewInt(1)
+	for i := 1; i <= n; i++ {
+		result.Mul(result, big.NewInt(int64(i)))
+	}
+	return result
+}
+
+func Combinations(whole int, part int) *big.Int {
+	cs := big.NewInt(0).Div(Factorial(whole), Factorial(part))
+	return cs.Div(cs, Factorial(whole-part))
+}
+
+func Permutations(whole int, part int) *big.Int {
+	return big.NewInt(0).Div(Factorial(whole), Factorial(part))
 }
