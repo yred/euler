@@ -9,8 +9,6 @@ package main
 import (
 	"fmt"
 	"math/big"
-
-	"./common"
 )
 
 func main() {
@@ -18,5 +16,5 @@ func main() {
 }
 
 func Solution() *big.Int {
-	return common.Combinations(40, 20)
+	return big.NewInt(0).Binomial(40, 20)
 }

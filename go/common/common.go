@@ -108,11 +108,6 @@ func Factorial(n int) *big.Int {
 	return result
 }
 
-func Combinations(whole int, part int) *big.Int {
-	cs := big.NewInt(0).Div(Factorial(whole), Factorial(part))
-	return cs.Div(cs, Factorial(whole-part))
-}
-
 func Permutations(whole int, part int) *big.Int {
 	return big.NewInt(0).Div(Factorial(whole), Factorial(part))
 }
