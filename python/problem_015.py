@@ -7,11 +7,7 @@ the right and down, there are exactly 6 routes to the bottom right corner.
 
 How many such routes are there through a 20×20 grid?
 """
-from math import factorial as fact
-
-
-def combinations(n, k):
-    return fact(n) / fact(k) / fact(n-k)
+from common import ncr
 
 
 def solution():
@@ -20,7 +16,7 @@ def solution():
     # the right (out of the overall 40 moves).
     # The total number of routes is thus equal to the number of 20-element
     # subsets out of a 40-element set.
-    return combinations(40, 20)
+    return ncr(40, 20)
 
 
 if __name__ == '__main__':
