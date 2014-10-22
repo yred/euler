@@ -15,10 +15,10 @@ import (
 )
 
 func main() {
-	fmt.Println(Solution())
+	fmt.Println(solution())
 }
 
-func Solution() int {
+func solution() int {
 	lcm := 1
 	for i := 2; i <= 20; i++ {
 		lcm = (i * lcm) / common.GCD(lcm, i)

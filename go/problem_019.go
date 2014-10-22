@@ -25,10 +25,10 @@ import (
 )
 
 func main() {
-	fmt.Println(Solution())
+	fmt.Println(solution())
 }
 
-func Solution() (sundays int) {
+func solution() (sundays int) {
 	for year := 1901; year <= 2000; year++ {
 		for month := time.January; month <= time.December; month++ {
 			first := time.Date(year, month, 1, 0, 0, 0, 0, time.UTC)

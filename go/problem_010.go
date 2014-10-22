@@ -11,10 +11,10 @@ import (
 )
 
 func main() {
-	fmt.Println(Solution())
+	fmt.Println(solution())
 }
 
-func Solution() (sum int64) {
+func solution() (sum int64) {
 	for _, p := range common.PrimesUpTo(2000000) {
 		sum += int64(p)
 	}

@@ -13,9 +13,9 @@ import (
 )
 
 func main() {
-	fmt.Println(Solution())
+	fmt.Println(solution())
 }
 
-func Solution() int {
+func solution() int {
 	return common.SumDigits(big.NewInt(0).Exp(big.NewInt(2), big.NewInt(1000), nil).String())
 }

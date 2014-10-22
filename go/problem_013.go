@@ -113,10 +113,10 @@ import (
 )
 
 func main() {
-	fmt.Println(Solution())
+	fmt.Println(solution())
 }
 
-func Solution() int {
+func solution() int {
 	numbersStr := strings.Split(strings.TrimSpace(`
         	37107287533902102798797998220837590246510135740250
         	46376937677490009712648124896970078050417018260538

@@ -12,9 +12,9 @@ import (
 )
 
 func main() {
-	fmt.Println(Solution())
+	fmt.Println(solution())
 }
 
-func Solution() *big.Int {
+func solution() *big.Int {
 	return big.NewInt(0).Binomial(40, 20)
 }

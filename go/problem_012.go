@@ -29,10 +29,10 @@ import (
 )
 
 func main() {
-	fmt.Println(Solution())
+	fmt.Println(solution())
 }
 
-func Solution() (n int) {
+func solution() (n int) {
 	threshold := 500
 
 	for i := 1; ; i++ {

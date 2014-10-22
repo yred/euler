@@ -38,10 +38,10 @@ import (
 type Triangle [][]int
 
 func main() {
-	fmt.Println(Solution())
+	fmt.Println(solution())
 }
 
-func Solution() int {
+func solution() int {
 	rows := strings.Split(strings.TrimSpace(`
         75
         95 64

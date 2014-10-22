@@ -12,10 +12,10 @@ import (
 )
 
 func main() {
-	fmt.Println(Solution())
+	fmt.Println(solution())
 }
 
-func Solution() (sum int) {
+func solution() (sum int) {
 	for i := 1; i < 1000; i++ {
 		if i%3 == 0 || i%5 == 0 {
 			sum += i

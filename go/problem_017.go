@@ -49,13 +49,13 @@ var dict = map[int]string{
 }
 
 func main() {
-	fmt.Println(Solution())
+	fmt.Println(solution())
 }
 
-func Solution() int {
+func solution() int {
 	letterCount := 0
 	for i := 1; i <= 1000; i++ {
-		for _, c := range ToWords(i) {
+		for _, c := range toWords(i) {
 			if 'a' <= c && c <= 'z' {
 				letterCount++
 			}
@@ -64,7 +64,7 @@ func Solution() int {
 	return letterCount
 }
 
-func ToWords(n int) string {
+func toWords(n int) string {
 	switch {
 	case n < 100:
 		if value, ok := dict[n]; ok {
@@ -79,7 +79,7 @@ func ToWords(n int) string {
 		if n%100 == 0 {
 			return hundreds
 		} else {
-			return hundreds + " and " + ToWords(n%100)
+			return hundreds + " and " + toWords(n%100)
 		}
 	default:
 		thousands := dict[n/1000] + " " + dict[1000]
@@ -87,9 +87,9 @@ func ToWords(n int) string {
 		if n%1000 == 0 {
 			return thousands
 		} else if n%1000 < 100 {
-			return thousands + " and " + ToWords(n%1000)
+			return thousands + " and " + toWords(n%1000)
 		} else {
-			return thousands + " " + ToWords(n%1000)
+			return thousands + " " + toWords(n%1000)
 		}
 	}
 }

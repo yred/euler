@@ -13,10 +13,10 @@ import (
 )
 
 func main() {
-	fmt.Println(Solution())
+	fmt.Println(solution())
 }
 
-func Solution() (prime int) {
+func solution() (prime int) {
 	n := 600851475143
 
 	primes := common.PrimesUpTo(int(math.Sqrt(float64(n))))

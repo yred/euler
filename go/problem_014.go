@@ -23,10 +23,10 @@ import (
 )
 
 func main() {
-	fmt.Println(Solution())
+	fmt.Println(solution())
 }
 
-func Solution() int {
+func solution() int {
 	maxLen, maxN := 0, 0
 
 	for i := 1; i < 1000000; i++ {

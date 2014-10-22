@@ -14,10 +14,10 @@ import (
 )
 
 func main() {
-	fmt.Println(Solution())
+	fmt.Println(solution())
 }
 
-func Solution() (product int) {
+func solution() (product int) {
 	for a := 1; a < 1000/3; a++ {
 		for b := a + 1; b < (1000-a)/2; b++ {
 			c := 1000 - a - b

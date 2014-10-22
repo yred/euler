@@ -14,10 +14,10 @@ import (
 )
 
 func main() {
-	fmt.Println(Solution())
+	fmt.Println(solution())
 }
 
-func Solution() int {
+func solution() int {
 	// Index of the 10001st prime in a 0-indexed sequence
 	var target = 10000
 

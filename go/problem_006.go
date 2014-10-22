@@ -21,10 +21,10 @@ import (
 )
 
 func main() {
-	fmt.Println(Solution())
+	fmt.Println(solution())
 }
 
-func Solution() int {
+func solution() int {
 	var sum, sumSquares int
 
 	for i := 1; i <= 100; i++ {

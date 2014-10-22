@@ -15,10 +15,10 @@ import (
 )
 
 func main() {
-	fmt.Println(Solution())
+	fmt.Println(solution())
 }
 
-func Solution() (max int) {
+func solution() (max int) {
 	for i := 100; i < 1000; i++ {
 		for j := 100; j < 1000; j++ {
 			if max < i*j && common.IsPalindrome(strconv.Itoa(i*j)) {

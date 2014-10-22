@@ -15,9 +15,9 @@ import (
 )
 
 func main() {
-	fmt.Println(Solution())
+	fmt.Println(solution())
 }
 
-func Solution() int {
+func solution() int {
 	return common.SumDigits(common.Factorial(100).String())
 }

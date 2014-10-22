@@ -15,10 +15,10 @@ import (
 )
 
 func main() {
-	fmt.Println(Solution())
+	fmt.Println(solution())
 }
 
-func Solution() (sum int) {
+func solution() (sum int) {
 	for a, b := 1, 2; b <= 4e6; {
 		if b%2 == 0 {
 			sum += b
