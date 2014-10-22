@@ -35,9 +35,9 @@ def is_abundant(n):
 def is_sum(n, elements):
     """
     Returns True if n is the sum of any 2 members of `elements`, where
-    `elements` is a list of positive, sorted values
+    `elements` is a sequence
     """
-    for a in takewhile(lambda e: e <= n/2, elements):
+    for a in elements:
         if n - a in elements:
             return True
 
@@ -45,17 +45,13 @@ def is_sum(n, elements):
 
 
 def solution():
-    abundant = []
+    abundant = set()
+    non_sums = list()
 
     for n in range(1, MIN_CERTAIN):
         if is_abundant(n):
-            abundant.append(n)
+            abundant.add(n)
 
-    # min(abundant) = abundant[0]
-    min_sum = 2*abundant[0]
-    non_sums = list(range(1, min_sum))
-
-    for n in range(min_sum + 1, MIN_CERTAIN):
         if not is_sum(n, abundant):
             non_sums.append(n)
 
