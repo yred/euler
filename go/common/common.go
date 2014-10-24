@@ -29,6 +29,32 @@ func PrimesUpTo(limit int) (primes []int) {
 	return
 }
 
+func PrimeSetUpTo(limit int) map[int]struct{} {
+	primes := make(map[int]struct{})
+
+	var empty struct{}
+
+	primes[2] = empty
+
+	sieve := NewBitSet((limit - 1) / 2)
+	sieve.SetAll(true)
+
+	// Set non-primes to false, using the sieve of Sundaram
+	for i := 1; i < int(math.Sqrt(float64(limit/2)))+1; i++ {
+		for j := 1; j < (limit-i)/(1+2*i)+1; j++ {
+			sieve.Set(i+j+(2*i*j)-1, false)
+		}
+	}
+
+	sieve.Iterate(func(ix int, val bool) {
+		if val {
+			primes[2*(ix+1)+1] = empty
+		}
+	})
+
+	return primes
+}
+
 func IsPrime(n int) bool {
 	for i := 2; i <= int(math.Sqrt(float64(n))); i++ {
 		if n%i == 0 {

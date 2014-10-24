@@ -7,7 +7,7 @@ Euler discovered the remarkable quadratic formula:
         n² + n + 41
 
 It turns out that the formula will produce 40 primes for the consecutive values
-n = 0 to 39. However, when n = 40, 402 + 40 + 41 = 40(40 + 1) + 41 is divisible
+n = 0 to 39. However, when n = 40, 40² + 40 + 41 = 40(40 + 1) + 41 is divisible
 by 41, and certainly when n = 41, 41² + 41 + 41 is clearly divisible by 41.
 
 The incredible formula  n² − 79n + 1601 was discovered, which produces 80
