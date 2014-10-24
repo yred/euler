@@ -35,7 +35,7 @@ PRECISION = getcontext().prec = SKIP + 2*1000
 
 def parts(string, n):
     """
-    Yield successive n-sized parts from string.
+    Yields successive n-sized parts from string.
 
     Originally from:
         http://stackoverflow.com/questions/312443/how-do-you-split-a-list-into-evenly-sized-chunks-in-python
@@ -55,7 +55,7 @@ def is_cycle(candidate, original):
 def find_cycle(digit_str):
     c = Counter(digit_str)
 
-    # The case of a signle repeated digit
+    # The case of a single repeated digit
     if len(c) == 1:
         return digit_str[0]
 
