@@ -3,6 +3,7 @@ package common
 import (
 	"math"
 	"math/big"
+	"strconv"
 )
 
 func PrimesUpTo(limit int) (primes []int) {
@@ -138,6 +139,20 @@ func Factorial(n int) *big.Int {
 
 func Permutations(whole int, part int) *big.Int {
 	return big.NewInt(0).Div(Factorial(whole), Factorial(part))
+}
+
+func Digits(n int) []int {
+	if n < 0 {
+		n = -n
+	}
+
+	digits := make([]int, int64(math.Log10(float64(n)))+1)
+
+	for ix, d := range strconv.Itoa(n) {
+		digits[ix] = int(byte(d) - '0')
+	}
+
+	return digits
 }
 
 func SumDigits(str string) (sum int) {
