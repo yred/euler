@@ -30,12 +30,10 @@ func PrimesUpTo(limit int) (primes []int) {
 	return
 }
 
-func PrimeSetUpTo(limit int) map[int]struct{} {
-	primes := make(map[int]struct{})
+func PrimeSetUpTo(limit int) map[int]bool {
+	primes := make(map[int]bool)
 
-	var empty struct{}
-
-	primes[2] = empty
+	primes[2] = true
 
 	sieve := NewBitSet((limit - 1) / 2)
 	sieve.SetAll(true)
@@ -49,7 +47,7 @@ func PrimeSetUpTo(limit int) map[int]struct{} {
 
 	sieve.Iterate(func(ix int, val bool) {
 		if val {
-			primes[2*(ix+1)+1] = empty
+			primes[2*(ix+1)+1] = true
 		}
 	})
 
@@ -160,4 +158,24 @@ func SumDigits(str string) (sum int) {
 		sum += int(byte(str[i]) - '0')
 	}
 	return
+}
+
+func AllInt(elems []int, fn func(int) bool) bool {
+	for _, e := range elems {
+		if !fn(e) {
+			return false
+		}
+	}
+
+	return true
+}
+
+func AnyInt(elems []int, fn func(int) bool) bool {
+	for _, e := range elems {
+		if fn(e) {
+			return true
+		}
+	}
+
+	return false
 }
