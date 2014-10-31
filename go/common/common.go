@@ -39,6 +39,14 @@ func Digits(n int) []int {
 	return digits
 }
 
+func Integer(digits []int) (number int) {
+	for _, d := range digits {
+		number *= 10
+		number += d
+	}
+	return
+}
+
 func SumDigits(str string) (sum int) {
 	for _, b := range []byte(str) {
 		sum += int(b - '0')
