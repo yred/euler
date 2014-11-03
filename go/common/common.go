@@ -39,6 +39,14 @@ func Digits(n int) []int {
 	return digits
 }
 
+func Strings(ns []int) []string {
+	strs := make([]string, len(ns))
+	for ix, n := range ns {
+		strs[ix] = strconv.Itoa(n)
+	}
+	return strs
+}
+
 func Integer(digits []int) (number int) {
 	for _, d := range digits {
 		number *= 10
