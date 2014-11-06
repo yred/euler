@@ -5,26 +5,6 @@ import (
 	"strconv"
 )
 
-// Originally from:
-//   http://stackoverflow.com/questions/1752414/how-to-reverse-a-string-in-go
-func ReverseString(str string) string {
-	runes := []rune(str)
-	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
-		runes[i], runes[j] = runes[j], runes[i]
-	}
-	return string(runes)
-}
-
-func IsPalindrome(str string) bool {
-	runes := []rune(str)
-	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
-		if runes[i] != runes[j] {
-			return false
-		}
-	}
-	return true
-}
-
 func Digits(n int) []int {
 	if n < 0 {
 		n = -n
@@ -39,20 +19,20 @@ func Digits(n int) []int {
 	return digits
 }
 
-func Strings(ns []int) []string {
-	strs := make([]string, len(ns))
-	for ix, n := range ns {
-		strs[ix] = strconv.Itoa(n)
-	}
-	return strs
-}
-
 func Integer(digits []int) (number int) {
 	for _, d := range digits {
 		number *= 10
 		number += d
 	}
 	return
+}
+
+func Strings(ns []int) []string {
+	strs := make([]string, len(ns))
+	for ix, n := range ns {
+		strs[ix] = strconv.Itoa(n)
+	}
+	return strs
 }
 
 func SumDigits(str string) (sum int) {

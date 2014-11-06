@@ -68,7 +68,7 @@ func C(n int, r int) *big.Int {
 // Returns all r-length combinations of elements in `set`. Combinations are
 // produced in sorted order
 func Combinations(set []int, r int) [][]int {
-	if len(set) < r {
+	if len(set) < r || r <= 0 {
 		return nil
 	}
 
@@ -128,4 +128,32 @@ func AnyInt(elems []int, fn func(int) bool) bool {
 	}
 
 	return false
+}
+
+func TakeWhile(elems []int, fn func(int) bool) []int {
+	// The return value defaults to the entire input slice
+	index := len(elems)
+
+	for ix, e := range elems {
+		if !fn(e) {
+			index = ix
+			break
+		}
+	}
+
+	return elems[:index]
+}
+
+func DropWhile(elems []int, fn func(int) bool) []int {
+	// The return value defaults to an empty slice
+	index := len(elems)
+
+	for ix, e := range elems {
+		if !fn(e) {
+			index = ix
+			break
+		}
+	}
+
+	return elems[index:]
 }
