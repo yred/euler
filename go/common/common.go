@@ -35,6 +35,14 @@ func Strings(ns []int) []string {
 	return strs
 }
 
+func Ints(strs []string) []int {
+	ns := make([]int, len(strs))
+	for ix, s := range strs {
+		ns[ix], _ = strconv.Atoi(s)
+	}
+	return ns
+}
+
 func SumDigits(str string) (sum int) {
 	for _, b := range []byte(str) {
 		sum += int(b - '0')
