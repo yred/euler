@@ -32,7 +32,7 @@ func solution() int {
 	// Although 1/φ(1) = 1, 1 wouldn't be a suitable minimal initial value
 	nmin, min := 1, float64(10)
 
-	for n, totient := range common.Totient(limit, nil) {
+	for n, totient := range common.Totient(2, limit, nil) {
 		if isPermutation(n, totient) {
 			if ratio := float64(n) / float64(totient); ratio < min {
 				nmin, min = n, ratio

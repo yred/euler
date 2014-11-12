@@ -36,7 +36,7 @@ func solution() int {
 
 	nmax, max := 1, float64(1)
 
-	for n, totient := range common.Totient(limit, nil) {
+	for n, totient := range common.Totient(1, limit, nil) {
 		if ratio := float64(n) / float64(totient); ratio > max {
 			nmax, max = n, ratio
 		}

@@ -124,24 +124,32 @@ func Factors(n int, primes []int) map[int]int {
 	return factors
 }
 
-// Returns the value of Euler's totient function for integers in [2, limit]
-func Totient(limit int, primes []int) map[int]int {
+// Returns the value of Euler's totient function for integers in [start, limit]
+func Totient(start, limit int, primes []int) map[int]int {
 	if len(primes) == 0 {
 		primes = PrimesUpTo(limit)
 	}
 
 	totients := make(map[int]int)
 
-	// Compute the totient of prime powers
+	// Keep track of elements that need to be removed before returning
+	deleteLater := make([]int, 0)
+
+	// Compute the totient of prime powers up to limit
 	for _, p := range primes {
 		power := p
 		for power <= limit {
 			totients[power] = power - (power / p)
+
+			if power < start {
+				deleteLater = append(deleteLater, power)
+			}
+
 			power *= p
 		}
 	}
 
-	for n := 2; n <= limit; n++ {
+	for n := start; n <= limit; n++ {
 		if _, ok := totients[n]; ok {
 			continue
 		}
@@ -152,6 +160,10 @@ func Totient(limit int, primes []int) map[int]int {
 		for prime, power := range factors {
 			totients[n] *= totients[Power(prime, power)]
 		}
+	}
+
+	for _, n := range deleteLater {
+		delete(totients, n)
 	}
 
 	return totients
