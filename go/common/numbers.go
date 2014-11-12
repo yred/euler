@@ -92,3 +92,67 @@ func Divisors(n int) []int {
 
 	return append(divisors[:fIndex], divisors[maxDivs-bIndex:]...)
 }
+
+func Factors(n int, primes []int) map[int]int {
+	if len(primes) == 0 {
+		primes = PrimesUpTo(n)
+	}
+
+	ncopy := n
+
+	factors := make(map[int]int)
+	for _, p := range primes {
+		if p*p > n {
+			if ncopy > 1 {
+				factors[ncopy] = 1
+			}
+			break
+		}
+
+		if ncopy%p == 0 {
+			for ncopy%p == 0 {
+				factors[p]++
+				ncopy /= p
+			}
+		}
+
+		if ncopy == 1 {
+			break
+		}
+	}
+
+	return factors
+}
+
+// Returns the value of Euler's totient function for integers in [2, limit]
+func Totient(limit int, primes []int) map[int]int {
+	if len(primes) == 0 {
+		primes = PrimesUpTo(limit)
+	}
+
+	totients := make(map[int]int)
+
+	// Compute the totient of prime powers
+	for _, p := range primes {
+		power := p
+		for power <= limit {
+			totients[power] = power - (power / p)
+			power *= p
+		}
+	}
+
+	for n := 2; n <= limit; n++ {
+		if _, ok := totients[n]; ok {
+			continue
+		}
+
+		totients[n] = 1
+
+		factors := Factors(n, primes)
+		for prime, power := range factors {
+			totients[n] *= totients[Power(prime, power)]
+		}
+	}
+
+	return totients
+}
