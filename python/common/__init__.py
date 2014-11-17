@@ -120,7 +120,7 @@ def digits(n):
     return map(int, str(n))
 
 
-def multicount(start, *steps):
+def multicount(start, steps):
     """
     A modified version of itertools.count() that adds support for unevenly
     spaced values

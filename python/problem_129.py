@@ -40,9 +40,9 @@ def solution():
     # for which A(n) first exceeds `threshold` is `threshold` itself
 
     # Skip all even numbers, as well as numbers ending with a 5
-    for p in multicount(threshold+1, 2, 6, 8, 10):
-        if threshold <= A(p):
-            return p
+    for n in multicount(threshold+1, [2, 6, 8, 10]):
+        if threshold <= A(n):
+            return n
 
 
 if __name__ == '__main__':
