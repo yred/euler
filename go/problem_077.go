@@ -27,23 +27,23 @@ func solution() (a int) {
 	target := 5000
 
 	plimit := 1000
-	primes := common.PrimesUpTo(plimit)
+	primes := reverse(common.PrimesUpTo(plimit))
 
 	for n := 2; ; n++ {
 		if n > plimit {
 			plimit *= 10
-			primes = common.PrimesUpTo(plimit)
+			primes = reverse(common.PrimesUpTo(plimit))
 		}
 
 		plist := append([]int{}, primes...)
 		for i := range plist {
-			if plist[i] > n {
-				plist = reverse(plist[:i])
+			if plist[i] <= n {
+				plist = plist[i:]
 				break
 			}
 		}
 
-		if combinations(n, plist) > target {
+		if summations(n, plist) > target {
 			a = n
 			break
 		}
@@ -54,13 +54,13 @@ func solution() (a int) {
 
 // Returns the number of ways in which `total` can be produced as a sum of
 // elements from the reverse sorted array `list`
-func combinations(total int, list []int) (count int) {
+func summations(total int, list []int) (count int) {
 
 	for ix, largest := range list[:len(list)-1] {
 		remaining := total
 		for largest <= remaining {
 			remaining -= largest
-			count += combinations(remaining, list[ix+1:])
+			count += summations(remaining, list[ix+1:])
 		}
 	}
 
