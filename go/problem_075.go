@@ -49,8 +49,7 @@ func solution() (count int) {
 
 		for n := start; n < m; n += 2 {
 			if common.GCD(m, n) == 1 {
-				sides := rightTriangle(m, n)
-				a, b, c := sides[0], sides[1], sides[2]
+				a, b, c := rightTriangle(m, n)
 
 				perimeter := a + b + c
 
@@ -77,6 +76,6 @@ func solution() (count int) {
 // described by Euclid's formula. For more information, visit:
 //
 //      http://en.wikipedia.org/wiki/Pythagorean_triple#Generating_a_triple
-func rightTriangle(m, n int) [3]int {
-	return [3]int{m*m - n*n, 2 * m * n, m*m + n*n}
+func rightTriangle(m, n int) (int, int, int) {
+	return m*m - n*n, 2 * m * n, m*m + n*n
 }
