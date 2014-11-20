@@ -25,7 +25,6 @@ package main
 import (
 	"fmt"
 	"math"
-	"strings"
 
 	"./common"
 )
@@ -37,7 +36,7 @@ func main() {
 func solution() (count int) {
 	limit := 1500000
 
-	pythagoreans := make(map[int]map[string]bool)
+	pythagoreans := make(map[int]int)
 
 	for m := 2; m <= int(math.Sqrt(float64(limit/2))); m++ {
 		var start int
@@ -49,33 +48,28 @@ func solution() (count int) {
 
 		for n := start; n < m; n += 2 {
 			if common.GCD(m, n) == 1 {
-				a, b, c := rightTriangle(m, n)
+				perimeter := rightTrianglePerimeter(m, n)
 
-				perimeter := a + b + c
+				for p := perimeter; p <= limit; p += perimeter {
+					pythagoreans[p]++
 
-				for k := 1; k*perimeter <= limit; k++ {
-					if _, ok := pythagoreans[k*perimeter]; !ok {
-						pythagoreans[k*perimeter] = make(map[string]bool)
+					if pythagoreans[p] == 1 {
+						count++
+					} else if pythagoreans[p] == 2 {
+						count--
 					}
-					pythagoreans[k*perimeter][strings.Join(common.Strings([]int{k * a, k * b, k * c}), "")] = true
 				}
 			}
-		}
-	}
-
-	for perimeter := range pythagoreans {
-		if len(pythagoreans[perimeter]) == 1 {
-			count++
 		}
 	}
 
 	return
 }
 
-// Returns the sides of the right triangle defined by the tuple (m, n), as
+// Returns the perimeter of the right triangle defined by the tuple (m, n), as
 // described by Euclid's formula. For more information, visit:
 //
 //      http://en.wikipedia.org/wiki/Pythagorean_triple#Generating_a_triple
-func rightTriangle(m, n int) (int, int, int) {
-	return m*m - n*n, 2 * m * n, m*m + n*n
+func rightTrianglePerimeter(m, n int) int {
+	return 2 * (m*m + m*n)
 }
