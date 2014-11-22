@@ -90,6 +90,14 @@ def idivisors(n):
             yield n/i
 
 
+def divisor_pairs(n):
+    """Yields the divisor pairs of `n`"""
+
+    for i in range(1, int(sqrt(n) + 1)):
+        if n % i == 0:
+            yield i, n/i
+
+
 def product(ns):
     """Returns the product of the sequence `ns`"""
     return reduce(lambda a, b: a*b, ns, 1)
