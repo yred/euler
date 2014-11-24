@@ -11,6 +11,15 @@ import (
 	"fmt"
 )
 
+type rectangle struct {
+	Width  int
+	Length int
+}
+
+func (r rectangle) Area() int {
+	return r.Width * r.Length
+}
+
 func main() {
 	fmt.Println(solution())
 }
@@ -26,35 +35,35 @@ func solution() int {
 		}
 	}
 
-	candidates := make(map[int]int)
+	candidates := make(map[rectangle]int)
 
-	for a := 1; ; a++ {
+	for w := 1; ; w++ {
 		lower := 1
 		upper := maxdim
 
 		for upper-lower > 1 {
-			b := (upper + lower) / 2
+			l := (upper + lower) / 2
 
-			if rectangles(a, b) > target {
-				upper = b
+			if rectangles(w, l) > target {
+				upper = l
 			} else {
-				lower = b
+				lower = l
 			}
 		}
 
-		candidates[a*lower] = target - rectangles(a, lower)
-		candidates[a*upper] = rectangles(a, upper) - target
+		candidates[rectangle{w, lower}] = target - rectangles(w, lower)
+		candidates[rectangle{w, upper}] = rectangles(w, upper) - target
 
-		if lower <= a {
+		if lower <= w {
 			break
 		}
 	}
 
-	var minDelta, minArea int
-	for area, delta := range candidates {
-		if minDelta == 0 || delta < minDelta {
-			minDelta = delta
-			minArea = area
+	var minArea, minDiff int
+	for rect, diff := range candidates {
+		if minDiff == 0 || diff < minDiff {
+			minDiff = diff
+			minArea = rect.Area()
 		}
 	}
 
