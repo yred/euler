@@ -26,9 +26,9 @@ def non_squares(limit):
 
 
 def solution():
-    # Though a precision of 101 should be sufficient to retrieve the correct
-    # answer, the resulting sum is off by 1. 102 is the smallest precision that
-    # yields the correct answer
+    # A precision of 102 is required to obtain sufficiently precise square roots
+    # for numbers < 100 (which only contain one digit to the left of the decimal
+    # point)
     getcontext().prec = 102
 
     return sum(sum(map(int, str(Decimal(n).sqrt()).replace('.', '')[:100]))
