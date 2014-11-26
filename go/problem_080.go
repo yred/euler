@@ -24,12 +24,10 @@ func main() {
 }
 
 func solution() (sum int) {
-	lbound := 1
-	ubound := 100
-	digits := 100
-
-	for n := lbound; n <= ubound; n++ {
-		sum += common.Sum(squareRootDigits(n, digits))
+	for n := 1; n <= 100; n++ {
+		if !isSquare(n) {
+			sum += common.Sum(squareRootDigits(n, 100))
+		}
 	}
 
 	return
@@ -44,7 +42,7 @@ func isSquare(n int) bool {
 }
 
 func bigSquare(n *big.Int) *big.Int {
-	return big.NewInt(0).Exp(n, big.NewInt(2), nil)
+	return big.NewInt(0).Mul(n, n)
 }
 
 func bigAppend(a *big.Int, b int) *big.Int {
@@ -63,11 +61,13 @@ func squareRootDigits(n, decimals int) []int {
 	bigN := big.NewInt(int64(n))
 	current := big.NewInt(int64(isqrt))
 
-	for ix := 1; ix <= decimals; ix++ {
-		// Account for 2 extra decimal digits from the product
+	for ix := len(digits); ix < decimals; ix++ {
+		// Account for 2 extra decimal digits from the product of integers each
+		// containing an extra digit
 		bigN = bigN.Mul(bigN, big.NewInt(100))
 
 		lo, hi := 0, 9
+
 		if bigSquare(bigAppend(current, hi)).Cmp(bigN) < 0 {
 			digits = append(digits, hi)
 			current.Set(bigAppend(current, hi))
@@ -81,9 +81,10 @@ func squareRootDigits(n, decimals int) []int {
 					hi = mid
 				}
 
+				// The latest digit is found when `mid` becomes "stationary"
 				if median(lo, hi) == mid {
-					digits = append(digits, mid)
-					current.Set(bigAppend(current, mid))
+					digits = append(digits, lo)
+					current.Set(bigAppend(current, lo))
 					break
 				}
 			}
