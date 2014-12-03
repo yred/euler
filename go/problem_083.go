@@ -25,17 +25,17 @@ import (
 	"./common"
 )
 
-type point struct {
+type Point struct {
 	Row, Col int
 }
 
-type cell struct {
+type Cell struct {
 	Cost, Best int
 }
 
 // Returns `true` if a move from `other` to the current cell results in a more
 // optimal path
-func (c *cell) Update(other *cell) bool {
+func (c *Cell) Update(other Cell) bool {
 	if newCost := other.Best + c.Cost; newCost < c.Best {
 		c.Best = newCost
 		return true
@@ -64,63 +64,63 @@ func solution() int {
 
 	maxRow, maxCol := len(matrix)-1, len(matrix[0])-1
 
-	cells := make(map[point]*cell)
+	cells := make(map[Point]*Cell)
 
 	for row := 0; row <= maxRow; row++ {
 		for col := 0; col <= maxCol; col++ {
-			cells[point{row, col}] = &cell{Cost: matrix[row][col], Best: maxPath}
+			cells[Point{row, col}] = &Cell{Cost: matrix[row][col], Best: maxPath}
 		}
 	}
 
-	cells[point{0, 0}].Best = matrix[0][0]
+	cells[Point{0, 0}].Best = matrix[0][0]
 
 	// Compute a first estimate on the best path by by limiting the possible
 	// moves to `Down` and `Right`
-	paths := []point{point{0, 0}}
+	paths := []Point{Point{0, 0}}
 
 	for len(paths) > 0 {
-		newPaths := make([]point, 0)
+		newPaths := make([]Point, 0)
 
-		for _, pt := range paths {
-			cell := cells[pt]
-			row, col := pt.Row, pt.Col
+		for _, point := range paths {
+			cell := cells[point]
+			row, col := point.Row, point.Col
 
-			if row < maxRow && cells[point{row + 1, col}].Update(cell) {
-				newPaths = append(newPaths, point{row + 1, col})
+			if row < maxRow && cells[Point{row + 1, col}].Update(*cell) {
+				newPaths = append(newPaths, Point{row + 1, col})
 			}
 
-			if col < maxCol && cells[point{row, col + 1}].Update(cell) {
-				newPaths = append(newPaths, point{row, col + 1})
+			if col < maxCol && cells[Point{row, col + 1}].Update(*cell) {
+				newPaths = append(newPaths, Point{row, col + 1})
 			}
 		}
 
 		paths = newPaths
 	}
 
-	// Compute the real best path to each cell using continuous updates, until
-	// the solution converges for all cells
+	// Compute the actual optimal path for every cell using continuous updates,
+	// until the solution converges for all cells
 	for {
 		updated := false
 
-		for pt, c := range cells {
-			row, col := pt.Row, pt.Col
+		for point, cell := range cells {
+			row, col := point.Row, point.Col
 
-			neighbors := make([]*cell, 0)
+			neighbors := make([]*Cell, 0)
 			if row > 0 {
-				neighbors = append(neighbors, cells[point{row - 1, col}])
+				neighbors = append(neighbors, cells[Point{row - 1, col}])
 			}
 			if row < maxRow {
-				neighbors = append(neighbors, cells[point{row + 1, col}])
+				neighbors = append(neighbors, cells[Point{row + 1, col}])
 			}
 			if col > 0 {
-				neighbors = append(neighbors, cells[point{row, col - 1}])
+				neighbors = append(neighbors, cells[Point{row, col - 1}])
 			}
 			if col < maxCol {
-				neighbors = append(neighbors, cells[point{row, col + 1}])
+				neighbors = append(neighbors, cells[Point{row, col + 1}])
 			}
 
 			for _, neighbor := range neighbors {
-				updated = updated || neighbor.Update(c)
+				updated = neighbor.Update(*cell) || updated
 			}
 		}
 
@@ -129,5 +129,5 @@ func solution() int {
 		}
 	}
 
-	return cells[point{maxRow, maxCol}].Best
+	return cells[Point{maxRow, maxCol}].Best
 }
