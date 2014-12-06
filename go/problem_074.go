@@ -47,7 +47,7 @@ func solution() (count int) {
 
 		path := make([]int, 0)
 		var cur int
-		for cur = n; indexOf(cur, path) != -1; cur = sumDigitFactorials(cur) {
+		for cur = n; indexOf(cur, path) == -1; cur = sumDigitFactorials(cur) {
 			path = append(path, cur)
 		}
 
