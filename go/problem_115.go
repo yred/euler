@@ -33,10 +33,7 @@ func main() {
 func solution() (n int) {
 	threshold := 1000000
 
-	for n = 50; ; n++ {
-		if combinations(n, 50) > threshold {
-			break
-		}
+	for n = 50; combinations(n, 50) <= threshold; n++ {
 	}
 
 	return
