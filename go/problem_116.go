@@ -24,6 +24,12 @@ import (
 	"fmt"
 )
 
+type input struct {
+	row, tile int64
+}
+
+var memo = make(map[input]int64)
+
 func main() {
 	fmt.Println(solution())
 }
@@ -39,6 +45,10 @@ func solution() int64 {
 }
 
 func combinations(rowLen, tileLen int64) int64 {
+	if res, ok := memo[input{rowLen, tileLen}]; ok {
+		return res
+	}
+
 	if rowLen < tileLen {
 		return 0
 	}
@@ -49,6 +59,8 @@ func combinations(rowLen, tileLen int64) int64 {
 	for length := tileLen; length < rowLen; length++ {
 		count += combinations(rowLen-length, tileLen)
 	}
+
+	memo[input{rowLen, tileLen}] = count
 
 	return count
 }
