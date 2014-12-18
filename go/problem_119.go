@@ -31,7 +31,8 @@ func solution() (number string) {
 	// Maximum sum of the digits of `maxlen`-digit numbers
 	maxbase := maxlen * 9
 
-	pdSums := make(map[int][]string)
+	// Mapping between number lengths and valid digit power sum numbers
+	dpSums := make(map[int][]string)
 
 	for base := 2; base <= maxbase; base++ {
 		bigbase := big.NewInt(int64(base))
@@ -44,18 +45,18 @@ func solution() (number string) {
 			}
 
 			if common.SumDigits(powStr) == base {
-				if array, ok := pdSums[len(powStr)]; ok {
-					array = append(array, powStr)
+				if _, ok := dpSums[len(powStr)]; ok {
+					dpSums[len(powStr)] = append(dpSums[len(powStr)], powStr)
 				} else {
-					pdSums[len(powStr)] = []string{powStr}
+					dpSums[len(powStr)] = []string{powStr}
 				}
 			}
 		}
 	}
 
 	for length := 2; length <= maxlen; length++ {
-		if numstrs, ok := pdSums[length]; ok {
-			if len(numstrs) <= target {
+		if numstrs, ok := dpSums[length]; ok {
+			if len(numstrs) >= target {
 				sort.Strings(numstrs)
 				number = numstrs[target-1]
 				break
