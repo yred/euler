@@ -4,6 +4,18 @@ import (
 	"math"
 )
 
+func IsPrime(n int) bool {
+	if n <= 1 {
+		return false
+	}
+	for d := 2; d <= int(math.Sqrt(float64(n))); d++ {
+		if n%d == 0 {
+			return false
+		}
+	}
+	return true
+}
+
 func PrimesUpTo(limit int) (primes []int) {
 	primes = append(primes, 2)
 
@@ -50,15 +62,6 @@ func PrimeSetUpTo(limit int) map[int]bool {
 	})
 
 	return primes
-}
-
-func IsPrime(n int) bool {
-	for i := 2; i <= int(math.Sqrt(float64(n))); i++ {
-		if n%i == 0 {
-			return false
-		}
-	}
-	return true
 }
 
 func GCD(a, b int) int {
