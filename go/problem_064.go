@@ -49,14 +49,9 @@ package main
 
 import (
 	"fmt"
-	"math"
 
 	"./common"
 )
-
-type Expr struct {
-	numer, denomR int
-}
 
 func main() {
 	fmt.Println(solution())
@@ -65,43 +60,11 @@ func main() {
 func solution() (count int) {
 	for i, j := 0, 1; j <= 100; i, j = i+1, j+1 {
 		for n := i*i + 1; n < j*j; n++ {
-			if len(continuedFraction(n))%2 == 1 {
+			if _, cycle := common.ContinuedFraction(n); len(cycle)%2 == 1 {
 				count++
 			}
 		}
 	}
 
 	return
-}
-
-func continuedFraction(n int) []int {
-	exprs := make(map[Expr]bool)
-	sqrtn := math.Sqrt(float64(n))
-
-	curA := int(sqrtn)
-	aSeq := []int{curA}
-
-	cur := Expr{1, curA}
-
-	for {
-		if _, exists := exprs[cur]; exists {
-			break
-		} else {
-			exprs[cur] = true
-		}
-
-		num, den := simplify(cur.numer, n-cur.denomR*cur.denomR)
-
-		curA := int(float64(num) / float64(den) * (sqrtn + float64(cur.denomR)))
-		aSeq = append(aSeq, curA)
-
-		cur = Expr{den, den*curA - cur.denomR}
-	}
-
-	return aSeq[1:]
-}
-
-func simplify(numer, denom int) (int, int) {
-	gcd := common.GCD(numer, denom)
-	return numer / gcd, denom / gcd
 }
