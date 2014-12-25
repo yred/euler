@@ -78,7 +78,7 @@ class Card(object):
 
     def __init__(self, cs):
         self.value = self._values.get(cs[0]) or int(cs[0])
-        self.suite = cs[1]
+        self.suit = cs[1]
 
     def __lt__(self, other):
         return self.value < other.value
@@ -95,9 +95,9 @@ class Hand(object):
 
         self.values = list(sorted(c.value for c in cards))
 
-        # Value and suite counters
+        # Value and suit counters
         self.vcounter = Counter(c.value for c in cards)
-        self.scounter = Counter(c.suite for c in cards)
+        self.scounter = Counter(c.suit for c in cards)
 
         self.rank = self._compute_rank()
 
