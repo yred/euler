@@ -94,6 +94,31 @@ func Combinations(set []int, r int) [][]int {
 	return cs
 }
 
+// Assumes there's at least 1 number as input
+func Max(nums ...int) int {
+	max := nums[0]
+
+	for _, n := range nums[1:] {
+		if n > max {
+			max = n
+		}
+	}
+
+	return max
+}
+
+func Min(nums ...int) int {
+	min := nums[0]
+
+	for _, n := range nums[1:] {
+		if n < min {
+			min = n
+		}
+	}
+
+	return min
+}
+
 func Sum(nums []int) int {
 	sum := 0
 	for _, n := range nums {
