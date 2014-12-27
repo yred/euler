@@ -182,3 +182,11 @@ func DropWhile(elems []int, fn func(int) bool) []int {
 
 	return elems[index:]
 }
+
+func GetSet(nums []int) map[int]bool {
+	set := make(map[int]bool)
+	for _, n := range nums {
+		set[n] = true
+	}
+	return set
+}
