@@ -22,13 +22,15 @@ func main() {
 }
 
 func solution() (sum int) {
-	target := 4
+	target := 5
 
 	sets := make([][]int, 0)
 
-	for start, limit := 3, 100; sum == 0; start, limit = limit, limit*2 {
+	for start, limit := 3, 1000; sum == 0; start, limit = limit, limit*2 {
 		primes := common.PrimesUpTo(limit)
-		primeset := common.PrimeSetUpTo(limit * limit * 20)
+
+		maxPrime := limit * limit
+		primeset := common.PrimeSetUpTo(maxPrime)
 
 		startIx := len(primes) - 1
 		for ix, p := range primes {
@@ -39,11 +41,12 @@ func solution() (sum int) {
 		}
 
 		for _, p := range primes[startIx:] {
-			newSets := make([][]int, 0)
+			newSets := [][]int{[]int{p}}
 
 			for _, set := range sets {
-				if tryCombining(set, p, primeset) {
-					newSet := append(set, p)
+				if tryCombining(set, p, primeset, maxPrime) {
+					newSet := append(append([]int{}, set...), p)
+
 					if len(newSet) == target {
 						sum = common.Sum(newSet)
 						break
@@ -57,7 +60,6 @@ func solution() (sum int) {
 				break
 			} else {
 				sets = append(sets, newSets...)
-				sets = append(sets, []int{p})
 			}
 		}
 	}
@@ -65,13 +67,19 @@ func solution() (sum int) {
 	return
 }
 
-func tryCombining(primes []int, prime int, primeset map[int]bool) bool {
+func tryCombining(primes []int, prime int, primeset map[int]bool, maxPrimeset int) bool {
 	pstrs, pstr := common.Strings(primes), strconv.Itoa(prime)
 
 	for _, p := range pstrs {
 		for _, n := range []int{Int(p + pstr), Int(pstr + p)} {
-			if _, isPrime := primeset[n]; !isPrime {
-				return false
+			if n < maxPrimeset {
+				if _, isPrime := primeset[n]; !isPrime {
+					return false
+				}
+			} else {
+				if !common.IsPrime(n) {
+					return false
+				}
 			}
 		}
 	}
