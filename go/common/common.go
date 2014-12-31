@@ -53,3 +53,11 @@ func SumDigits(str string) (sum int) {
 func Power(a, b int) int {
 	return int(math.Pow(float64(a), float64(b)))
 }
+
+func Range(start, limit int) []int {
+	numbers := make([]int, limit-start)
+	for ix, value := 0, start; value < limit; ix, value = ix+1, value+1 {
+		numbers[ix] = value
+	}
+	return numbers
+}
