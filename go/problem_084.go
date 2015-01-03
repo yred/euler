@@ -75,7 +75,6 @@ import (
 	"fmt"
 	"math/rand"
 	"sort"
-	"strconv"
 	"strings"
 )
 
@@ -137,7 +136,7 @@ type player struct {
 type squares []*square
 
 func (sqs squares) Len() int {
-	return len(squares)
+	return len(sqs)
 }
 
 func (sqs squares) Less(i, j int) bool {
@@ -198,11 +197,13 @@ func (b *board) Next(typ, start int) *square {
 	return b.squares[ix]
 }
 
-func (b *board) Play(p *player, d *dice, turns int) {
+func (b *board) Play(p *player, d dice, turns int) {
 	doubles := 0
 
 	for ix := 0; ix < turns; ix++ {
-		if steps, isDouble := d.Roll(); isDouble {
+		steps, isDouble := d.Roll()
+
+		if isDouble {
 			doubles++
 		} else {
 			doubles = 0
@@ -241,15 +242,15 @@ func (b *board) ModalString() string {
 
 	modal := ""
 	for ix := 0; ix < 3; ix++ {
-		modal += strconv.Itoa(mostFrequent[ix])
+		modal += fmt.Sprintf("%02d", mostFrequent[ix].index)
 	}
 	return modal
 }
 
-func (d *dice) Roll() (int, bool) {
-	value, first, allSame, first := 0, -1, true
+func (d dice) Roll() (int, bool) {
+	value, first, allSame := 0, -1, true
 
-	for _, max := range []int(*d) {
+	for _, max := range []int(d) {
 		throw := 1 + rand.Intn(max)
 		value += throw
 
@@ -268,7 +269,7 @@ func (p *player) Move(steps int) {
 }
 
 func (p *player) Visit(sq *square) {
-	p.game.handle(p, sq)
+	p.game.Handle(p, sq)
 }
 
 func main() {
@@ -277,7 +278,7 @@ func main() {
 
 func solution() string {
 	monopoly := newBoard()
-	monopoly.Play(&player{monopoly, 0}, &dice([]int{4, 4}), 1000000)
+	monopoly.Play(&player{monopoly, 0}, dice([]int{4, 4}), 1000000)
 	return monopoly.ModalString()
 }
 
@@ -299,16 +300,14 @@ func visitSteps(steps int) func(*board, *player, *square) {
 	}
 }
 
-func host() func(*board, *player, *square) {
-	return func(b *board, p *player, sq *square) {
-		sq.Host(p)
-	}
+func host(b *board, p *player, sq *square) {
+	sq.Host(p)
 }
 
 // Complete the set of (chance or community chest) cards with the "filler"
 // `host` card/function, and return the full shuffled set
 func completeAndShuffle(cs []func(*board, *player, *square)) []func(*board, *player, *square) {
-	full = append([]func(*board, *player, *square) nil, cs...)
+	full := append(([]func(*board, *player, *square))(nil), cs...)
 	for ix := len(full); ix < NUM_CARDS; ix++ {
 		full = append(full, host)
 	}
