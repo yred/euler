@@ -74,6 +74,8 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -90,6 +92,8 @@ var LABELS = []string{
 	"E3", "R3", "F1", "F2", "U2", "F3", "G2J", "G1", "G2", "CC3", "G3", "R4",
 	"CH3", "H1", "T2", "H2",
 }
+
+const NUM_CARDS = 16
 
 var CCHEST = []func(*board, *player, *square){
 	visitIndex(0),
@@ -116,7 +120,11 @@ type square struct {
 }
 
 type board struct {
-	squares []*square
+	squares  []*square
+	cchest   []func(*board, *player, *square)
+	cchestIx int
+	chance   []func(*board, *player, *square)
+	chanceIx int
 }
 
 type dice []int
@@ -124,6 +132,20 @@ type dice []int
 type player struct {
 	game     *board
 	position int
+}
+
+type squares []*square
+
+func (sqs squares) Len() int {
+	return len(squares)
+}
+
+func (sqs squares) Less(i, j int) bool {
+	return sqs[i].visits < sqs[j].visits
+}
+
+func (sqs squares) Swap(i, j int) {
+	sqs[i], sqs[j] = sqs[j], sqs[i]
 }
 
 func newSquare(index int, label string) *square {
@@ -155,7 +177,11 @@ func newBoard() *board {
 	for ix, label := range LABELS {
 		squares[ix] = newSquare(ix, label)
 	}
-	return &board{squares}
+
+	ccCards := completeAndShuffle(CCHEST)
+	chCards := completeAndShuffle(CHANCE)
+
+	return &board{squares, ccCards, 0, chCards, 0}
 }
 
 func (b *board) At(index int) *square {
@@ -172,30 +198,87 @@ func (b *board) Next(typ, start int) *square {
 	return b.squares[ix]
 }
 
-func (d *dice) Roll() int {
-	value := 0
-	for _, max := range []int(*d) {
-		value += (1 + rand.Intn(max))
+func (b *board) Play(p *player, d *dice, turns int) {
+	doubles := 0
+
+	for ix := 0; ix < turns; ix++ {
+		if steps, isDouble := d.Roll(); isDouble {
+			doubles++
+		} else {
+			doubles = 0
+		}
+
+		if doubles == 3 {
+			p.Visit(b.At(10))
+			doubles = 0
+		} else {
+			p.Move(steps)
+		}
 	}
-	return value
+}
+
+func (b *board) Handle(p *player, sq *square) {
+	switch sq.typ {
+	case CC:
+		b.cchest[b.cchestIx](b, p, sq)
+		b.cchestIx = (b.cchestIx + 1) % NUM_CARDS
+	case CH:
+		b.chance[b.chanceIx](b, p, sq)
+		b.chanceIx = (b.chanceIx + 1) % NUM_CARDS
+	default:
+		// Go to Jail
+		if sq.label == "G2J" {
+			p.Visit(b.At(10))
+		} else {
+			sq.Host(p)
+		}
+	}
+}
+
+func (b *board) ModalString() string {
+	mostFrequent := squares(append([]*square(nil), b.squares...))
+	sort.Sort(sort.Reverse(mostFrequent))
+
+	modal := ""
+	for ix := 0; ix < 3; ix++ {
+		modal += strconv.Itoa(mostFrequent[ix])
+	}
+	return modal
+}
+
+func (d *dice) Roll() (int, bool) {
+	value, first, allSame, first := 0, -1, true
+
+	for _, max := range []int(*d) {
+		throw := 1 + rand.Intn(max)
+		value += throw
+
+		if first >= 0 {
+			allSame = allSame && first == throw
+		} else {
+			first = throw
+		}
+	}
+
+	return value, allSame
 }
 
 func (p *player) Move(steps int) {
-
+	p.Visit(p.game.At(p.position + steps))
 }
 
 func (p *player) Visit(sq *square) {
-
+	p.game.handle(p, sq)
 }
 
 func main() {
 	fmt.Println(solution())
 }
 
-func solution() int {
+func solution() string {
 	monopoly := newBoard()
-
-	return 1
+	monopoly.Play(&player{monopoly, 0}, &dice([]int{4, 4}), 1000000)
+	return monopoly.ModalString()
 }
 
 func visitIndex(index int) func(*board, *player, *square) {
@@ -220,4 +303,20 @@ func host() func(*board, *player, *square) {
 	return func(b *board, p *player, sq *square) {
 		sq.Host(p)
 	}
+}
+
+// Complete the set of (chance or community chest) cards with the "filler"
+// `host` card/function, and return the full shuffled set
+func completeAndShuffle(cs []func(*board, *player, *square)) []func(*board, *player, *square) {
+	full = append([]func(*board, *player, *square) nil, cs...)
+	for ix := len(full); ix < NUM_CARDS; ix++ {
+		full = append(full, host)
+	}
+
+	shuffled := make([]func(*board, *player, *square), 16)
+	for ix, jx := range rand.Perm(NUM_CARDS) {
+		shuffled[ix] = full[jx]
+	}
+
+	return shuffled
 }
