@@ -59,14 +59,17 @@ func solution() (arrangements int) {
 
 			valid := true
 			for _, sq := range squares {
-				if _, found := d1[sq.Fst]; !found {
-					valid = false
-					break
+				_, foundFst1 := d1[sq.Fst]
+				_, foundFst2 := d2[sq.Fst]
+				_, foundSnd1 := d1[sq.Snd]
+				_, foundSnd2 := d2[sq.Snd]
+
+				if (foundFst1 && foundSnd2) || (foundFst2 && foundSnd1) {
+					continue
 				}
-				if _, found := d2[sq.Snd]; !found {
-					valid = false
-					break
-				}
+
+				valid = false
+				break
 			}
 
 			if valid {
@@ -75,7 +78,7 @@ func solution() (arrangements int) {
 		}
 	}
 
-	return
+	return arrangements / 2
 }
 
 func digits(elems []int) map[int]bool {
