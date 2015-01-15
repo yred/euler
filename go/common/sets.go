@@ -94,6 +94,34 @@ func Combinations(set []int, r int) [][]int {
 	return cs
 }
 
+// Returns all r-length combinations (with replacement) of elements in `set`.
+// Combinations are produced in sorted order
+func CombinationsWithReplacement(set []int, r int) [][]int {
+	if len(set) <= 0 || r <= 0 {
+		return nil
+	}
+
+	// Combinations
+	cs := make([][]int, int(C(len(set)+r-1, r).Int64()))
+
+	sorted := append([]int(nil), set...)
+	sort.Ints(sorted)
+
+	for ix, idxs := range Combinations(Range(0, len(set)+r-1), r) {
+		combo := make([]int, r)
+
+		lastIndex := -1
+		for jx, index := range idxs {
+			combo[jx] = sorted[index-lastIndex-1]
+			lastIndex = index
+		}
+
+		cs[ix] = combo
+	}
+
+	return cs
+}
+
 // Assumes there's at least 1 number as input
 func Max(nums ...int) int {
 	max := nums[0]
@@ -189,4 +217,16 @@ func GetSet(nums []int) map[int]bool {
 		set[n] = true
 	}
 	return set
+}
+
+func Repeat(n, times int) []int {
+	if times <= 0 {
+		return nil
+	}
+
+	ns := make([]int, times)
+	for ix := range ns {
+		ns[ix] = n
+	}
+	return ns
 }
