@@ -110,9 +110,10 @@ func CombinationsWithReplacement(set []int, r int) [][]int {
 	for ix, idxs := range Combinations(Range(0, len(set)+r-1), r) {
 		combo := make([]int, r)
 
-		lastIndex := -1
+		lastIndex, position := -1, 0
 		for jx, index := range idxs {
-			combo[jx] = sorted[index-lastIndex-1]
+			position += index - lastIndex - 1
+			combo[jx] = sorted[position]
 			lastIndex = index
 		}
 

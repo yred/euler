@@ -25,6 +25,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	"./common"
 )
@@ -37,15 +38,27 @@ func solution() (count int) {
 	digits := common.Range(0, 10)
 	ops := []func(float64, float64) float64{add, sub, mul, div}
 
+	opSets := make([][]func(float64, float64) float64, 0)
+	for _, index := range orderings(len(ops), 3) {
+		set := make([]func(float64, float64) float64, len(index))
+		for ix, pos := range index {
+			set[ix] = ops[pos]
+		}
+		opSets = append(opSets, set)
+	}
+
 	maxDigits, maxConsecutive := "", 0
 
 	for _, combo := range common.Combinations(digits, 4) {
 		generated := make(map[int]bool)
 
 		for _, perm := range common.Permutations(combo, 4) {
-			// TODO
+			for _, set := range opSets {
+				// TODO
+			}
 		}
 	}
+
 	return
 }
 
@@ -67,4 +80,25 @@ func div(a, b float64) float64 {
 	} else {
 		return a / b
 	}
+}
+
+// Returns all the permutations of the combinations with replacement
+func orderings(count, comboCount int) [][]int {
+	sep := "-"
+	all := make(map[string]bool)
+	elems := common.Range(0, count)
+	for _, c := range common.CombinationsWithReplacement(elems, comboCount) {
+		for _, p := range common.Permutations(c, comboCount) {
+			key := strings.Join(common.Strings(p), sep)
+			all[key] = true
+		}
+	}
+
+	ords := make([][]int, 0)
+	for key := range all {
+		slice := common.Ints(strings.Split(key, sep))
+		ords = append(ords, slice)
+	}
+
+	return ords
 }
