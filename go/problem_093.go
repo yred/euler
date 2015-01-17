@@ -34,12 +34,12 @@ func main() {
 	fmt.Println(solution())
 }
 
-func solution() (count int) {
+func solution() string {
 	digits := common.Range(0, 10)
 	ops := []func(float64, float64) float64{add, sub, mul, div}
 
 	opSets := make([][]func(float64, float64) float64, 0)
-	for _, index := range orderings(len(ops), 3) {
+	for _, index := range indexOrderings(len(ops), 3) {
 		set := make([]func(float64, float64) float64, len(index))
 		for ix, pos := range index {
 			set[ix] = ops[pos]
@@ -53,13 +53,40 @@ func solution() (count int) {
 		generated := make(map[int]bool)
 
 		for _, perm := range common.Permutations(combo, 4) {
+			a := float64(perm[0])
+			b := float64(perm[1])
+			c := float64(perm[2])
+			d := float64(perm[3])
+
 			for _, set := range opSets {
-				// TODO
+				x := set[0]
+				y := set[1]
+				z := set[2]
+
+				r1 := x(y(z(a, b), c), d)
+				if isInteger(r1) {
+					generated[int(r1)] = true
+				}
+
+				r2 := x(y(a, b), z(c, d))
+				if isInteger(r2) {
+					generated[int(r2)] = true
+				}
+			}
+		}
+
+		for n := 1; ; n++ {
+			if _, exists := generated[n]; !exists {
+				if n > maxConsecutive {
+					maxConsecutive = n
+					maxDigits = strings.Join(common.Strings(combo), "")
+				}
+				break
 			}
 		}
 	}
 
-	return
+	return maxDigits
 }
 
 func add(a, b float64) float64 {
@@ -76,29 +103,36 @@ func mul(a, b float64) float64 {
 
 func div(a, b float64) float64 {
 	if b == 0 {
-		return 0
+		// Obviously false result that wouldn't affect the result of the problem
+		return 1000000
 	} else {
 		return a / b
 	}
 }
 
-// Returns all the permutations of the combinations with replacement
-func orderings(count, comboCount int) [][]int {
-	sep := "-"
+// Returns the set of all possible permutations of the combinations (with
+// replacement) of the indexes of an array of size `setSize` chosen from
+// `numElems` elements
+func indexOrderings(numElems, setSize int) [][]int {
+	keySep := "-"
 	all := make(map[string]bool)
-	elems := common.Range(0, count)
-	for _, c := range common.CombinationsWithReplacement(elems, comboCount) {
-		for _, p := range common.Permutations(c, comboCount) {
-			key := strings.Join(common.Strings(p), sep)
+	elems := common.Range(0, numElems)
+	for _, c := range common.CombinationsWithReplacement(elems, setSize) {
+		for _, p := range common.Permutations(c, setSize) {
+			key := strings.Join(common.Strings(p), keySep)
 			all[key] = true
 		}
 	}
 
 	ords := make([][]int, 0)
 	for key := range all {
-		slice := common.Ints(strings.Split(key, sep))
+		slice := common.Ints(strings.Split(key, keySep))
 		ords = append(ords, slice)
 	}
 
 	return ords
+}
+
+func isInteger(x float64) bool {
+	return float64(int(x)) == x
 }
