@@ -29,31 +29,31 @@ func main() {
 	fmt.Println(solution())
 }
 
-func solution() (sum int) {
+func solution() int {
 	limit := 1000000
-	sums := make(map[int]int)
-
+	sumds := make(map[int]int)
 	amicables := make(map[int][]int)
 
 	for n := 1; n <= limit; n++ {
-		if _, exists := sums[n]; exists {
+		if _, exists := sumds[n]; exists {
 			continue
 		}
 
-		sd := sumDivs(n)
-		sums[n] = sd
+		sd := sumProperDivs(n)
+		sumds[n] = sd
 
 		if n < sd {
 			chain := []int{n}
 			for last := 1; n < sd && sd < limit; last++ {
 				chain = append(chain, sd)
 
-				sd = sumDivs(chain[last])
-				sums[chain[last]] = sd
+				sd = sumProperDivs(chain[last])
+				sumds[chain[last]] = sd
 
 				if ix := indexOf(chain, sd); ix >= 0 {
 					chain = chain[ix:]
 					amicables[common.Min(chain...)] = chain
+					break
 				}
 			}
 
@@ -63,17 +63,17 @@ func solution() (sum int) {
 		}
 	}
 
-	maxLen, maxEl := 0, 0
-	for key, chain := range amicables {
+	maxLenKey, maxLen := 0, 0
+	for minElem, chain := range amicables {
 		if len(chain) > maxLen {
-			maxLen, maxEl = len(chain), key
+			maxLenKey, maxLen = minElem, len(chain)
 		}
 	}
 
-	return maxEl
+	return maxLenKey
 }
 
-func sumDivs(n int) (sum int) {
+func sumProperDivs(n int) (sum int) {
 	divs := common.Divisors(n)
 	for _, d := range divs[:len(divs)-1] {
 		sum += d
