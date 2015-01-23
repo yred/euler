@@ -49,7 +49,7 @@ type puzzle struct {
 }
 
 func (p *puzzle) Row(n int) []int {
-    return p.rows[n]
+    return append([]int(nil), p.rows[n]...)
 }
 
 func (p *puzzle) Column(n int) []int {
@@ -58,6 +58,21 @@ func (p *puzzle) Column(n int) []int {
         col[ix] = row[n]
     }
     return col
+}
+
+func (p *puzzle) Block(n int) []int {
+    block := make([]int, 9)
+
+    bFirstRow := 3 * (n/3)
+    bFirstCol := 3 * (n%3)
+
+    for ix := 0; ix < 3; ix++ {
+        for jx := 0; jx <  3; jx++ {
+            block[3*ix + jx] = p.rows[bFirstRow + ix][bFirstCol + jx]
+        }
+    }
+
+    return block
 }
 
 func main() {
@@ -81,6 +96,7 @@ func solution() int {
         current[ix - 1] = common.Ints(strings.Split(line, ""))
         if ix == 9 {
             puzzles = append(puzzles, &puzzle{current})
+            current = make([][]int, 9)
         }
     }
 
