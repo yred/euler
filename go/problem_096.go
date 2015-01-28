@@ -37,68 +37,92 @@
 package main
 
 import (
-    "fmt"
-    "io/ioutil"
-    "strings"
+	"fmt"
+	"io/ioutil"
+	"strings"
 
-    "./common"
+	"./common"
 )
 
 type puzzle struct {
-    rows [][]int
+	rows [][]int
 }
 
 func (p *puzzle) Row(n int) []int {
-    return append([]int(nil), p.rows[n]...)
+	return append([]int(nil), p.rows[n]...)
 }
 
 func (p *puzzle) Column(n int) []int {
-    col := make([]int, 9)
-    for ix, row := range p.rows {
-        col[ix] = row[n]
-    }
-    return col
+	col := make([]int, 9)
+	for ix, row := range p.rows {
+		col[ix] = row[n]
+	}
+	return col
 }
 
 func (p *puzzle) Block(n int) []int {
-    block := make([]int, 9)
+	block := make([]int, 9)
 
-    bFirstRow := 3 * (n/3)
-    bFirstCol := 3 * (n%3)
+	bFirstRow := 3 * (n / 3)
+	bFirstCol := 3 * (n % 3)
 
-    for ix := 0; ix < 3; ix++ {
-        for jx := 0; jx <  3; jx++ {
-            block[3*ix + jx] = p.rows[bFirstRow + ix][bFirstCol + jx]
-        }
-    }
+	for ix := 0; ix < 3; ix++ {
+		for jx := 0; jx < 3; jx++ {
+			block[3*ix+jx] = p.rows[bFirstRow+ix][bFirstCol+jx]
+		}
+	}
 
-    return block
+	return block
+}
+
+func (p *puzzle) ToRow(n index) int {
+	return n / 9
+}
+
+func (p *puzzle) ToColumn(n index) int {
+	return n % 9
+}
+
+func (p *puzzle) ToBlock(n index) int {
+	return (p.ToRow(n)/3)*3 + (p.ToColumn(n) / 3)
+}
+
+func (p *puzzle) Solve() (success bool) {
+	unresolved := make(map[int][]int)
+
+	for {
+		updated := false
+
+		for ix, val := range p.rows {
+			// TODO
+		}
+	}
 }
 
 func main() {
-    fmt.Println(solution())
+	fmt.Println(solution())
 }
 
 func solution() int {
-    bytes, _ := ioutil.ReadFile("../resources/p096_sudoku.txt")
-    contents := strings.TrimSpace(string(bytes))
+	bytes, _ := ioutil.ReadFile("../resources/p096_sudoku.txt")
+	contents := strings.TrimSpace(string(bytes))
 
-    puzzles := make([]*puzzle, 0)
-    current := make([][]int, 9)
+	puzzles := make([]*puzzle, 0)
+	current := make([][]int, 9)
 
-    for ix, line := range strings.Split(contents, "\n") {
-        ix %= 10
+	for ix, line := range strings.Split(contents, "\n") {
+		ix %= 10
 
-        if ix == 0 {
-            continue
-        }
+		if ix == 0 {
+			continue
+		}
 
-        current[ix - 1] = common.Ints(strings.Split(line, ""))
-        if ix == 9 {
-            puzzles = append(puzzles, &puzzle{current})
-            current = make([][]int, 9)
-        }
-    }
+		current[ix-1] = common.Ints(strings.Split(line, ""))
+		if ix == 9 {
+			puzzles = append(puzzles, &puzzle{current})
+			current = make([][]int, 9)
+		}
+	}
 
-    return len(puzzles)
+	return len(puzzles)
 }

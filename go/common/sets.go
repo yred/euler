@@ -220,6 +220,36 @@ func GetSet(nums []int) map[int]bool {
 	return set
 }
 
+func Keys(set map[int]bool) []int {
+	keys := make([]int, 0)
+	for key := range set {
+		keys = append(keys, key)
+	}
+	return keys
+}
+
+func Union(sets ...map[int]bool) map[int]bool {
+	union := make(map[int]bool)
+	for _, set := range sets {
+		for key := range set {
+			union[key] = true
+		}
+	}
+	return union
+}
+
+func Difference(set map[int]bool, others map[int]bool) map[int]bool {
+	union := Union(others...)
+
+	delta := make(map[int]bool)
+	for key := range set {
+		if _, found := union[key]; !found {
+			delta[key] = true
+		}
+	}
+	return delta
+}
+
 func Repeat(n, times int) []int {
 	if times <= 0 {
 		return nil
