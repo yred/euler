@@ -238,7 +238,7 @@ func Union(sets ...map[int]bool) map[int]bool {
 	return union
 }
 
-func Difference(set map[int]bool, others map[int]bool) map[int]bool {
+func Difference(set map[int]bool, others ...map[int]bool) map[int]bool {
 	union := Union(others...)
 
 	delta := make(map[int]bool)
