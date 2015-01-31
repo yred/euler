@@ -68,9 +68,6 @@ def solution():
 
     found = 0
     for tsum, tupleset in sum_index.items():
-        if len(tupleset) < length:
-            continue
-
         for frow in tupleset:
             for fcol in spd_index[tsum][0][frow[0]]:
                 fst = spd_index[tsum][0][frow[-1]]
