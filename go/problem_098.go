@@ -41,11 +41,25 @@ func (sl strLists) Swap(i, j int) {
 	sl[i], sl[j] = sl[j], sl[i]
 }
 
+type intLists [][]int
+
+func (il intLists) Len() int {
+	return len(il)
+}
+
+func (il intLists) Less(i, j int) bool {
+	return il[i][0] < il[j][0]
+}
+
+func (il intLists) Swap(i, j int) {
+	il[i], il[j] = il[j], il[i]
+}
+
 func main() {
 	fmt.Println(solution())
 }
 
-func solution() int {
+func solution() string {
 	bytes, _ := ioutil.ReadFile("../resources/p098_words.txt")
 	contents := string(bytes)
 
@@ -85,19 +99,66 @@ func solution() int {
 		square := strconv.FormatInt(n*n, 10)
 
 		// Skip palindromic squares
-		if square != common.ReverseString(square) {
+		if !common.IsPalindrome(square) {
 			// Squares will be indexed by their length and the number of
 			// distinct digits they contain
 			l := len(square)
 			d := distinctCount(square)
 
-			// TODO
+			primaryKey := common.Tuple{l, d}
+			secondaryKey := common.SortString(square)
+
+			var newSqAnagrams []string
+			if _, exists := squareIdx[primaryKey]; exists {
+				if sqAnagrams, ok := squareIdx[primaryKey][secondaryKey]; ok {
+					newSqAnagrams = append(sqAnagrams, square)
+				} else {
+					newSqAnagrams = []string{square}
+				}
+			} else {
+				squareIdx[primaryKey] = make(map[string][]string)
+				newSqAnagrams = []string{square}
+			}
+			squareIdx[primaryKey][secondaryKey] = newSqAnagrams
 		}
 	}
 
-	// TODO
+	// Find the maximal anagramic square corresponding to the file's anagrams
+	for ix := 0; ix < len(anagList); {
+		curLen := len(anagList[ix][0])
+		results := make([]string, 0)
 
-	return 0
+		for ; ix < len(anagList) && len(anagList[ix][0]) == curLen; ix++ {
+			anagrams := anagList[ix]
+			distinct := distinctCount(anagrams[0])
+			relevant := squareIdx[common.Tuple{curLen, distinct}]
+
+			indices := common.Range(0, len(anagrams))
+			for _, ixPair := range common.Combinations(indices, 2) {
+				wa, wb := anagrams[ixPair[0]], anagrams[ixPair[1]]
+				permutation := getPermutation(wa, wb)
+
+				for _, anags := range relevant {
+					for _, square := range anags {
+						psquare := permutation(square)
+						for _, sq := range anags {
+							if psquare == sq {
+								largest := common.MaxStrings(square, psquare)
+								results = append(results, largest)
+								break
+							}
+						}
+					}
+				}
+			}
+		}
+
+		if len(results) > 0 {
+			return common.MaxStrings(results...)
+		}
+	}
+
+	return ""
 }
 
 func distinctCount(s string) int {
@@ -108,4 +169,81 @@ func distinctCount(s string) int {
 		}
 	}
 	return len(index)
+}
+
+// Returns a map linking each distinct character in `word` to the indices of
+// its occurences
+func positions(word string) map[rune][]int {
+	index := make(map[rune][]int)
+	for p, r := range []rune(word) {
+		if pos, exists := index[r]; exists {
+			index[r] = append(pos, p)
+		} else {
+			index[r] = []int{p}
+		}
+	}
+	return index
+}
+
+// Returns a function that accepts a string and returns one of its anagrams,
+// using the provided input/output pair as an example of the required
+// permutation
+func getPermutation(input, output string) func(string) string {
+	index := positions(input)
+
+	order := values(index)
+	sort.Sort(intLists(order))
+
+	permutation := make([]int, 0)
+	for _, r := range []rune(output) {
+		permutation = append(permutation, index[r][0])
+		index[r] = index[r][1:]
+	}
+
+	return func(s string) string {
+		sindex := positions(s)
+
+		sorder := values(sindex)
+		sort.Sort(intLists(sorder))
+
+		// Only return an anagram if the indices of `s` and `input` match
+		// (i.e., character/digit duplicates are contained in the same
+		// positions)
+		result := ""
+		if equal(sorder, order) {
+			for _, ix := range permutation {
+				result += string(s[ix])
+			}
+		}
+
+		return result
+	}
+}
+
+func values(m map[rune][]int) [][]int {
+	vals := make([][]int, 0)
+	for _, val := range m {
+		vals = append(vals, val)
+	}
+	return vals
+}
+
+func equal(a, b [][]int) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
+	for ix := range a {
+		if len(a[ix]) != len(b[ix]) {
+			return false
+		}
+
+		for jx := range a[ix] {
+			if a[ix][jx] != b[ix][jx] {
+				return false
+			}
+		}
+	}
+
+	return true
 }

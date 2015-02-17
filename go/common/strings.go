@@ -27,3 +27,27 @@ func ReplacePositions(str string, pos []int, r rune) string {
 	}
 	return string(runes)
 }
+
+func MaxStrings(strs ...string) string {
+	max := strs[0]
+
+	for _, s := range strs[1:] {
+		if s > max {
+			max = s
+		}
+	}
+
+	return max
+}
+
+func MinStrings(strs ...string) string {
+	min := strs[0]
+
+	for _, s := range strs[1:] {
+		if s < min {
+			min = s
+		}
+	}
+
+	return min
+}
