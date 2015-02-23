@@ -12,7 +12,7 @@ main = putStrLn $ show solution
 
 solution :: Integer
 solution = sum fibs
-    where fibs = filter even $ takeWhile (<= 4000000) $ fib 1 2
+    where fibs = filter even $ takeWhile (<=4000000) $ fib 1 2
 
 fib :: Integer -> Integer -> [Integer]
 fib a b = a : (fib b $ a+b)
