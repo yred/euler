@@ -8,7 +8,7 @@
 main = putStrLn $ show solution
 
 solution :: Integer
-solution = maximum [a*b | a <- [100..999], b <- [100..999], isPalindrome . show $ a*b]
+solution = maximum [a*b | a <- [100..999], b <- [100..a], isPalindrome . show $ a*b]
 
 isPalindrome :: String -> Bool
 isPalindrome s = s == reverse s
