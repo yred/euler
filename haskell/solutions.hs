@@ -1,13 +1,5 @@
 import qualified Data.List as List
 
--- 5. Smallest multiple:
--- 2520 is the smallest number that can be divided by each of the numbers from
--- 1 to 10 without any remainder.
--- What is the smallest positive number that is evenly divisible by all of the
--- numbers from 1 to 20?
-
-solution5 = foldl lcm 2 [2..20]
-
 
 -- 6. Sum square difference:
 -- The sum of the squares of the first ten natural numbers is,

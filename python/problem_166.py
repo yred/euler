@@ -66,6 +66,9 @@ def solution():
         for position, digit in enumerate(t):
             spd_index[tsum][position][digit].add(t)
 
+    # for s, ss in sorted(sum_index.items()):
+    #     print s, len(ss)
+
     found = 0
     for tsum, tupleset in sum_index.items():
         for frow in tupleset:
