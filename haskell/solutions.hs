@@ -1,13 +1,6 @@
 import qualified Data.List as List
 
 
--- 10. Summation of primes:
--- The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17.
--- Find the sum of all the primes below two million.
-
-solution10 = sum (takeWhile (<2000000) primes)
-
-
 -- 11. Largest product in a grid:
 -- In the 20×20 grid below, four numbers along a diagonal line have been marked
 -- in red (surrounded by underscores):
