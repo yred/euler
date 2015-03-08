@@ -28,4 +28,4 @@ solution :: Integer
 solution = head $ dropWhile (\n -> length (divisors n) <= 500) triangles
 
 triangles :: [Integer]
-triangles = scanl1 (+) [1..]
+triangles = map (\n -> n*(n+1) `div` 2) [1..]
