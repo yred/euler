@@ -33,6 +33,3 @@ apply f x = (x, f x)
 
 longestCollatz :: Integer -> (Integer, Int)
 longestCollatz limit = maximumBy (comparing snd) $ map (apply $ length . collatz) [1..limit]
-
-
-
