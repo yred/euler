@@ -26,4 +26,4 @@ solution :: Int
 solution = length $ filter (\(_, _, weekDay) -> weekDay == 7) $ map toWeekDate firstDays
 
 firstDays :: [Day]
-firstDays = zipWith (\year month -> fromGregorian year month 1) [1901..2000] [1..12] 
+firstDays = [fromGregorian year month 1 | year <- [1901..2000], month <- [1..12]]
