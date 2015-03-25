@@ -18,19 +18,19 @@ import System.IO.Unsafe
 main = putStrLn $ show solution
 
 solution :: Int
-solution = sum $ [ix*(score $ names !! ix) | ix <- [0..(length names - 1)]]
+solution = sum $ zipWith (*) (map score names) [1..]
+
+score :: String -> Int
+score name = sum $ map value name
+
+value :: Char -> Int
+value c = ord c - ord 'A' + 1
+
+names :: [String]
+names = sort . words $ map replaceNonAlpha contents
 
 replaceNonAlpha :: Char -> Char
 replaceNonAlpha c = if isAlpha c then c else ' ' 
 
 contents :: String
 contents = unsafePerformIO $ readFile "../resources/p022_names.txt"
-
-names :: [String]
-names = words $ map replaceNonAlpha contents
-
-value :: Char -> Int
-value c = ord c - ord 'A' + 1
-
-score :: String -> Int
-score name = sum $ map value name
