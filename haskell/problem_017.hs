@@ -10,7 +10,6 @@
 -- forty-two) contains 23 letters and 115 (one hundred and fifteen) contains 20
 -- letters. The use of "and" when writing out numbers is in compliance with
 -- British usage.
-import qualified Data.List as List
 import qualified Data.Map as Map
 
 main = putStrLn $ show solution
@@ -49,7 +48,6 @@ numbers = Map.fromList [(1, "one"),
 
 number :: Int -> String
 number n
-    | n < 1                  = error "n must be greater than or equal to 1"
     | n `Map.member` numbers = numbers Map.! n
     | n < 100                = number (tens n) ++ " " ++ number (n `mod` 10)
     | n `mod` 1000 == 0      = number (n `div` 1000) ++ " " ++ "thousand"
