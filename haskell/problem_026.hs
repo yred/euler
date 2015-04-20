@@ -18,6 +18,7 @@
 --
 -- Find the value of d < 1000 for which 1/d contains the longest recurring cycle
 -- in its decimal fraction part.
+import Data.List
 import Data.Tuple
 import qualified Data.Map as Map
 
@@ -25,17 +26,32 @@ import qualified Data.Map as Map
 main = putStrLn $ show solution
 
 solution :: Int
-solution = snd . maximum $ map (\n -> (cyclen . take (3*n) . drop (3*n) . fakediv 1 $ n, n)) [2..999]
+solution = snd . maximum $ map (\n -> (cyclen . take (3*n) . drop n . fakediv 1 $ n, n)) [2..999]
 
 fakediv :: Int -> Int -> [Int]
 fakediv 0 _ = []
 fakediv n d = n `div` d : fakediv ((n `mod` d)*10) d
 
 cyclen :: [Int] -> Int
-cyclen ns = length $ findCycle ns 1
+cyclen [] = 0
+cyclen xs = length . head . filter (isCycleOf ys) $ parts ys lf
+    where
+        lf = leastFrequent xs
+        ys = tail $ dropWhile (/=lf) xs
 
-findCycle :: [Int] -> Int -> [Int]
-findCycle ns len 
-    | len > length ns                       = []
-    | take len ns == take len (drop len ns) = take len ns
-    | otherwise                             = findCycle ns (len + 1)
+isCycleOf :: [Int] -> [Int] -> Bool
+isCycleOf xs ys
+    | length xs < length ys = False
+    | otherwise             = null $ (cycle' ys $ length xs) \\ xs
+
+cycle' :: [Int] -> Int -> [Int]
+cycle' ns len = take len (cycle ns)
+
+parts :: Eq a => [a] -> a -> [[a]]
+parts xs x = filter ((==x) . last) $ tail $ inits xs
+
+leastFrequent :: [Int] -> Int
+leastFrequent = snd . minimum . map swap . Map.toList . counts
+
+counts :: [Int] -> Map.Map Int Int
+counts = foldl (\mp n -> Map.insertWith (+) n 1 mp) Map.empty
