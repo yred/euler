@@ -11,11 +11,11 @@ Here are the records from a busy telephone system with one million users:
             ...     ...      ...
 
 The telephone number of the caller and the called number in record n are
-Caller(n) = S(2n-1) and Called(n) = S(2n) where S1,2,3,... come from the "Lagged
+Caller(n) = S(2n-1) and Called(n) = S(2n) where S(1,2,3,...) come from the "Lagged
 Fibonacci Generator":
 
-            For 1 ≤ k ≤ 55, Sk = [100003 - 200003k + 300007k^3] (modulo 1000000)
-            For 56 ≤ k, Sk = [S(k-24) + S(k-55)] (modulo 1000000)
+            For 1 ≤ k ≤ 55, S(k) = [100003 - 200003k + 300007k^3] (modulo 1000000)
+            For 56 ≤ k, S(k) = [S(k-24) + S(k-55)] (modulo 1000000)
 
 If Caller(n) = Called(n) then the user is assumed to have misdialled and the
 call fails; otherwise the call is successful.
