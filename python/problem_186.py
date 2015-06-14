@@ -32,23 +32,23 @@ from collections import deque
 from itertools import count
 
 
-class S(object):
-    def __init__(self):
-        self._vals = deque([], 55)
+def S():
+    """Yields values from a lagged Fibonacci generator"""
+    values = deque([], 55)
 
-    def __iter__(self):
-        for k in count(start=1):
-            if k <= 55:
-                curval = (100003 - 200003*k + 300007*(k**3)) % 1000000
-            else:
-                curval = (self._vals[-24] + self._vals[-55]) % 1000000
+    for k in count(start=1):
+        if k <= 55:
+            curval = (100003 - 200003*k + 300007*(k**3)) % 1000000
+        else:
+            curval = (values[-24] + values[-55]) % 1000000
 
-            yield curval
-            self._vals.append(curval)
+        yield curval
+        values.append(curval)
 
 
 def calls():
-    phone_numbers = iter(S())
+    """Yields consecutive (caller n°, called n°) values for successful calls"""
+    phone_numbers = S()
 
     while True:
         caller = next(phone_numbers)
