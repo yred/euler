@@ -6,11 +6,11 @@ def memoize(func):
     """Returns a memoized version of `func`"""
     data = {}
 
-    def wrapped(*args):
-        key = tuple(args)
+    def wrapped(*args, **kwargs):
+        key = tuple(list(args) + sorted(kwargs.items()))
 
         if key not in data:
-            data[key] = func(*args)
+            data[key] = func(*args, **kwargs)
 
         return data[key]
 
