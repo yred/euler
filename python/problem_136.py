@@ -20,6 +20,9 @@ def solution():
     limit = 5*10**7
     solutions = defaultdict(int)
 
+    # n = x² − y² − z² = (a + b)² − a² − (a - b)²       (where a > b > 0)
+    #   =>  a * (4*b - a) = n
+    #   =>  b > a/4
     for a in xrange(2, limit/4):
         for b in xrange(a/4 + 1, a):
             n = a*(4*b - a)
