@@ -37,11 +37,11 @@ func solution() int {
 
 	// Only keeping the leading and trailing digits of the last 2 Fibonacci
 	// numbers should be sufficient for checking for pandigitals at both ends
-	fA, lA, fB, lB := downsize(a, b, 30)
+	fA, lA, fB, lB := downsize(a, b, 20)
 
 	for k := 2749; ; k++ {
-		fA, fB := nextFib(fA, fB)
-		lA, lB := nextFib(lA, lB)
+		fA, fB = nextFib(fA, fB)
+		lA, lB = nextFib(lA, lB)
 
 		fBstr, lBstr := fB.String(), lB.String()
 		first9, last9 := fBstr[:9], lBstr[len(lBstr)-9:]
@@ -51,8 +51,8 @@ func solution() int {
 		}
 
 		if len(fBstr) >= 100 {
-			fA, _, fB, _ = downsize(fA, fB, 30)
-			_, lA, _, lB = downsize(lA, lB, 30)
+			fA, _, fB, _ = downsize(fA, fB, 20)
+			_, lA, _, lB = downsize(lA, lB, 20)
 		}
 	}
 }
@@ -74,7 +74,7 @@ func downsize(smaller, larger *big.Int, length int) (*big.Int, *big.Int, *big.In
 	delta := len(larger.String()) - len(smaller.String())
 
 	prefSmall, suffSmall := ends(smaller, length, length)
-	prefLarge, suffLarge := ends(smaller, length+delta, length)
+	prefLarge, suffLarge := ends(larger, length+delta, length)
 	return prefSmall, suffSmall, prefLarge, suffLarge
 }
 
