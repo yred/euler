@@ -35,7 +35,7 @@ func solution() (sum int) {
 	}
 
 	// Uses the fact that the products must be 4-digits long
-	startPairs := map[int]int{1: 1000, 10: 100, 100: 100}
+	startPairs := map[int]int{1: 1000, 10: 100}
 
 	for left, right := range startPairs {
 		for a := left; a < 10*left; a++ {
