@@ -33,5 +33,5 @@ isPrime n = (n >= 2) && (all (/=0) $ map (mod n) [2..(iSqrt n)])
 iSqrt :: Integral a => a -> a
 iSqrt n = floor . sqrt $ fromIntegral n
 
-digits :: (Show a, Integral a) => a -> [Int]
-digits = map Char.digitToInt . show
+digits :: (Show a, Integral a, Integral b) => a -> [b]
+digits = map (fromIntegral . Char.digitToInt) . show
