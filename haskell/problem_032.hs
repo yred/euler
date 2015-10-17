@@ -14,14 +14,13 @@
 -- include it once in your sum.
 import Data.List
 
+import Common.Utils
+
 
 main = putStrLn $ show solution
 
 solution :: Int
 solution = sum panProducts
-
-isPandigital9 :: String -> Bool
-isPandigital9 = (== "123456789") . sort
 
 startPairs :: [(Int, Int)]
 startPairs = [(1, 1000), (10, 100)]
@@ -33,4 +32,4 @@ products :: [[Int]]
 products = map (\(a, b) -> [a, b, a*b]) $ filter (\(a, b) -> a*b < 10000) multiPairs
 
 panProducts :: [Int]
-panProducts = nub $ map last $ filter (isPandigital9 . concat . (map show)) products
+panProducts = nub $ map last $ filter (isPandigital19 . concat . (map show)) products
