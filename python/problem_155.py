@@ -31,35 +31,36 @@ from collections import defaultdict
 from fractions import Fraction
 
 
-def parallel_capacitance(ca, cb):
-    return ca + cb
+def parallel_capacitance(nca, dca, ncb, dcb):
+    return Fraction(nca*dcb + ncb*dca, dca*dcb)
 
 
-def serial_capacitance(ca, cb):
-    fca = Fraction(1, ca)
-    fcb = Fraction(1, cb)
-    return 1/(fca + fcb)
+def serial_capacitance(nca, dca, ncb, dcb):
+    return Fraction(nca*ncb, nca*dcb + ncb*dca)
 
 
 def solution():
-    cvalues = set([Fraction(60, 1)])
+    cvalues = set([str(Fraction(60, 1))])
 
     circuits = defaultdict(set)
     circuits[1].add(Fraction(60, 1))
 
-    target = 15
+    target = 18
     for n in range(2, target+1):
         for na in circuits.keys():
             for ca in circuits[na]:
                 for cb in circuits[n - na]:
-                    parallel = parallel_capacitance(ca, cb)
-                    if parallel not in cvalues:
-                        cvalues.add(parallel)
+                    nca, dca = ca.numerator, ca.denominator
+                    ncb, dcb = cb.numerator, cb.denominator
+
+                    parallel = parallel_capacitance(nca, dca, ncb, dcb)
+                    if str(parallel) not in cvalues:
+                        cvalues.add(str(parallel))
                         circuits[n].add(parallel)
 
-                    serial = serial_capacitance(ca, cb)
-                    if serial not in cvalues:
-                        cvalues.add(serial)
+                    serial = serial_capacitance(nca, dca, ncb, dcb)
+                    if str(serial) not in cvalues:
+                        cvalues.add(str(serial))
                         circuits[n].add(serial)
 
     return len(cvalues)
