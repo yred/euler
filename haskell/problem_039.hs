@@ -12,7 +12,7 @@ import Common.Utils
 main = putStrLn $ show solution
 
 solution :: Int
-solution = snd . maximum . map (\p -> (length $ rightTriangles p, p)) $ [4..1000]
+solution = snd . maximum . zipMap (length . rightTriangles) $ [4..1000]
 
 rightTriangles :: Int -> [(Int, Int, Int)]
 rightTriangles p = [(a, b, c) | a <- [1..maxA], b <- [(a + 1)..(maxB a)], c <- [p - a - b], a*a + b*b == c*c]
