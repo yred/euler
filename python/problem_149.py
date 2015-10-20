@@ -70,8 +70,8 @@ def columns(grid):
 
 
 def diagonals(grid):
-    rowlen = len(grid[0])
-    filled = [[0]*(rowlen-ix) + row + [0]*ix for ix, row in enumerate(grid)]
+    length = len(grid[0]) - 1
+    filled = [[0]*ix + row + [0]*(length-ix) for ix, row in enumerate(grid)]
     return zip(*filled)
 
 
