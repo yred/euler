@@ -68,6 +68,7 @@ class Polynomial(object):
         """Returns the result of evaluating the polynomial at x"""
         return sum(c*(x**i) for i, c in enumerate(self))
 
+    @property
     def degree(self):
         return len(self.coeffs) - 1
 
@@ -94,8 +95,8 @@ class Equation(object):
         if coeff == 0:
             raise ValueError('The substitution term must not equal 0')
 
-        return Equation(left=[-1.0*e/coeff if idx != index else -1
-                              for idx, e in enumerate(self.left)],
+        return Equation(left=[-1.0*elem/coeff if idx != index else -1
+                              for idx, elem in enumerate(self.left)],
                         right=-self.right/coeff)
 
     def __getitem__(self, n):
@@ -156,7 +157,7 @@ def optimum(seq):
 
 def solution():
     P = Polynomial([(-1)**i for i in range(11)])
-    seq = [P(n+1) for n in range(P.degree())]
+    seq = [P(n+1) for n in range(P.degree)]
 
     return sum(Polynomial(optimum(seq[:i+1]))(i+2) for i in range(len(seq)))
 
