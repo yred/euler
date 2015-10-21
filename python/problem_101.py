@@ -95,9 +95,7 @@ class Equation(object):
         if coeff == 0:
             raise ValueError('The substitution term must not equal 0')
 
-        return Equation(left=[-1.0*elem/coeff if idx != index else -1
-                              for idx, elem in enumerate(self.left)],
-                        right=-self.right/coeff)
+        return (-1.0 / coeff)*self
 
     def __getitem__(self, n):
         return self.left[n]
@@ -159,7 +157,7 @@ def solution():
     P = Polynomial([(-1)**i for i in range(11)])
     seq = [P(n+1) for n in range(P.degree)]
 
-    return sum(Polynomial(optimum(seq[:i+1]))(i+2) for i in range(len(seq)))
+    return int(sum(Polynomial(optimum(seq[:i+1]))(i+2) for i in range(len(seq))))
 
 
 if __name__ == '__main__':
