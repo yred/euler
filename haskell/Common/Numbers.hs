@@ -4,6 +4,7 @@ module Common.Numbers
 , factors
 , isPrime
 , primes
+, primesUpTo
 ) where
 
 import qualified Data.Char as Char
@@ -26,6 +27,17 @@ factors n = p : factors (n `div` p)
 
 primes :: Integral a => [a]
 primes = filter isPrime [2..]
+
+primesUpTo :: Integral a => a -> [a]
+primesUpTo n = 2 : primeSieve (maxFactor n) [3, 5..n]
+
+primeSieve :: Integral a => a -> [a] -> [a]
+primeSieve f (p:ns)
+    | p <= f    = p : (primeSieve f $ filter ((/=0) . (`mod` p)) ns)
+    | otherwise = p : ns
+
+maxFactor :: Integral a => a -> a
+maxFactor = floor . sqrt . fromIntegral
 
 isPrime :: Integral a => a -> Bool
 isPrime n = (n >= 2) && (all (/=0) $ map (mod n) [2..(iSqrt n)])
