@@ -44,7 +44,7 @@ primesDownFrom :: Integral a => a -> [a]
 primesDownFrom n = filter prime numbers ++ reverse factors
     where
         factors = primesUpTo $ maxFactor n
-        prime a = all (\p -> a `mod` p /= 0) factors
+        prime a = all ((/=0) . (a `mod`)) factors
         numbers = [n,(n-1)..(1 + last factors)]
 
 isPrime :: Integral a => a -> Bool
