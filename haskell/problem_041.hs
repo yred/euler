@@ -7,13 +7,18 @@
 -- What is the largest n-digit pandigital prime that exists?
 import Data.List (sort)
 
-import Common.Numbers (primesUpTo)
+import Common.Numbers (primesDownFrom)
 
 
 main = putStrLn $ show solution
 
 solution :: Int
-solution = head . filter isPandigital . reverse $ primesUpTo (10^7)
+solution = head . filter isPandigital $ primes
+
+-- There aren't any 8 or 9-digit pandigital primes (3 divides all 8 and 9-digit
+-- pandigitals). The largest 7-digit pandigital is 7654321
+primes :: [Int]
+primes = primesDownFrom 7654321
 
 isPandigital :: Int -> Bool
 isPandigital n = (sort $ show n) == dstring n

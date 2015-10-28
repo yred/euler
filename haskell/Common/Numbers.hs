@@ -4,6 +4,7 @@ module Common.Numbers
 , factors
 , isPrime
 , primes
+, primesDownFrom
 , primesUpTo
 ) where
 
@@ -38,6 +39,13 @@ primeSieve f (p:ns)
 
 maxFactor :: Integral a => a -> a
 maxFactor = floor . sqrt . fromIntegral
+
+primesDownFrom :: Integral a => a -> [a]
+primesDownFrom n = filter prime numbers ++ reverse factors
+    where
+        factors = primesUpTo $ maxFactor n
+        prime a = all (\p -> a `mod` p /= 0) factors
+        numbers = [n,(n-1)..(1 + last factors)]
 
 isPrime :: Integral a => a -> Bool
 isPrime n = (n >= 2) && (all (/=0) $ map (mod n) [2..(iSqrt n)])
