@@ -35,18 +35,14 @@ threeDigit :: Integer -> String
 threeDigit = printf "%03d"
 
 link :: [String] -> [String] -> [String]
-link xs ys = filter noDups [(head x) : y | x <- xs, y <- ys, last2 x == first2 y]
-
-first2 :: [a] -> [a]
-first2 = take 2
-
-last2 :: [a] -> [a]
-last2 xs = [last (init xs), last xs]
+link xs ys = filter noDups [(head x) : y | x <- xs, y <- ys, tail x == take 2 y]
 
 complete :: String -> Integer
 complete nstr
-    | missingDigit nstr == "0" = 0
-    | otherwise                = read (missingDigit nstr ++ nstr)
+    | missing == "0" = 0
+    | otherwise      = read (missing ++ nstr)
+    where
+        missing = missingDigit nstr
 
 missingDigit :: String -> String
 missingDigit = ("0123456789"\\)
