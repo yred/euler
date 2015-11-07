@@ -22,12 +22,16 @@ divisorPairs :: Integral a => a -> [(a, a)]
 divisorPairs n = map (\a -> (a, n `div` a)) $ filter (\a -> n `mod` a == 0) [1..(iSqrt n)]
 
 factors :: Integral a => a -> [a]
-factors 1 = []
-factors n = p : factors (n `div` p)
-    where p = head $ filter (\p -> n `mod` p == 0) primes
+factors n = factors' n primes
+
+factors' :: Integral a => a -> [a] -> [a]
+factors' n ps@(p:p')
+    | n == 1         = []
+    | n `mod` p == 0 = p : factors' (n `div` p) ps
+    | otherwise      = factors' n p'
 
 primes :: Integral a => [a]
-primes = filter isPrime [2..]
+primes = 2 : filter isPrime [3, 5..]
 
 primesUpTo :: Integral a => a -> [a]
 primesUpTo n = 2 : primeSieve (maxFactor n) [3, 5..n]
@@ -48,7 +52,9 @@ primesDownFrom n = filter prime numbers ++ reverse factors
         numbers = [n,(n-1)..(1 + last factors)]
 
 isPrime :: Integral a => a -> Bool
-isPrime n = (n >= 2) && (all (/=0) $ map (mod n) [2..(iSqrt n)])
+isPrime n
+    | n < 2     = False
+    | otherwise =  all ((/=0) . (mod n)) $ takeWhile (<=(iSqrt n)) primes
 
 iSqrt :: Integral a => a -> a
 iSqrt n = floor . sqrt $ fromIntegral n
