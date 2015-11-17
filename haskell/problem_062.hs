@@ -6,29 +6,28 @@
 --
 -- Find the smallest cube for which exactly five permutations of its digits are
 -- cube.
-import Data.List (sort, span)
-import qualified Data.Map as Map
-
-import Common.Utils (zipMap)
+import Control.Arrow
+import Data.List     (sort, span)
+import Data.Map      (elems, fromListWith)
 
 
 main = putStrLn $ show solution
 
 solution :: Integer
-solution = minimum . map minimum . head . dropWhile null . map checkPermutations $ bylength cubes
+solution = minimum . concat . head . dropWhile null . map (nPermutations 5) $ bylength cubes
 
-checkPermutations :: [Integer] -> [[Integer]]
-checkPermutations = Map.elems . Map.filter ((==5). length) . Map.fromListWith (++) . map key
+nPermutations :: Int -> [Integer] -> [[Integer]]
+nPermutations n = filter ((==n) . length) . elems . fromListWith (++) . map tuple
     where
-        key n = (sort (show n), [n])
+        tuple = (sort . show) &&& (:[])
 
-bylength :: [Integer] -> [[Integer]]
-bylength = bylength' 10
+bylength :: Integral a => [a] -> [[a]]
+bylength = bylength' 1
 
-bylength' :: Integer -> [Integer] -> [[Integer]]
-bylength' maxn ns = current : (bylength' (10*maxn) others)
+bylength' :: Integral a => a -> [a] -> [[a]]
+bylength' len ns = current : (bylength' (len+1) others)
     where
-        (current, others) = span (<maxn) ns
+        (current, others) = span (< (10^len)) ns
 
 cubes :: [Integer]
 cubes = map (^3) [1..]
