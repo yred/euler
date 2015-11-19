@@ -56,8 +56,8 @@ def primes_up_to(limit):
     sieve = bytearray(numbytes)
 
     # Set "non-primes" to 1, using the sieve of Sundaram
-    for i in range(1, int(sqrt(limit/2)) + 1):
-        for j in range(1, (limit - i)/(1 + 2*i) + 1):
+    for i in xrange(1, int(sqrt(limit/2)) + 1):
+        for j in xrange(1, (limit - i)/(1 + 2*i) + 1):
             index = i + j + 2*i*j - 1
             if index >= maxindex:
                 break
