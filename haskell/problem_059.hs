@@ -52,7 +52,8 @@ splitOn d xs
     where (first, remaining) = break (==d) xs
 
 keys :: [[Int]]
-keys = map (map ord) . concat . map permutations $ combinations ['a'..'z'] 3
+keys = concat . map permutations $ combinations elements 3
+    where elements = map ord ['a'..'z']
 
 decrypt :: [Int] -> String
 decrypt = map chr . zipWith xor encrypted . cycle
