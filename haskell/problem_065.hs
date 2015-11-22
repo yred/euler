@@ -42,15 +42,11 @@ main = putStrLn $ show solution
 solution :: Int
 solution = sum . digits . numerator $ convergent 100
 
-convergent :: Integer -> Rational
-convergent 1 = 2
-convergent n = convergent' (n - 1) $ coefficient n 
+convergent :: Int -> Rational
+convergent = foldr1 (\el acc -> el + 1/acc) . flip take elements
 
-convergent' :: Integer -> Rational -> Rational
-convergent' 1 r = 2 + 1/r
-convergent' n r = convergent' (n - 1) $ (coefficient n) + 1/r
+combine3 :: [a] -> [a] -> [a] -> [a]
+combine3 (x:xs) (y:ys) (z:zs) = x : y : z : (combine3 xs ys zs)
 
-coefficient :: Integer -> Rational
-coefficient n
-    | n `mod` 3 == 0 = 2*(n `div` 3) % 1
-    | otherwise      = 1
+elements :: [Rational]
+elements = 2 : combine3 [1,1..] [2,4..] [1,1..]
