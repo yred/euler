@@ -74,7 +74,16 @@ data Card = Card Value Suit deriving (Eq, Ord, Show)
 
 type Hand = [Card]
 
-data Rank = High Int | Pair Int | Dpair Int | Three Int | Straight Int | Flush Int | Full Int | Four Int | Sflush Int | Royal
+data Rank = High Int
+          | Pair Int
+          | Dpair Int
+          | Three Int
+          | Straight Int
+          | Flush Int
+          | Full Int
+          | Four Int
+          | Sflush Int
+          | Royal
     deriving (Eq, Ord, Show)
 
 value :: Card -> Int
@@ -95,16 +104,16 @@ rank cs@(a:b:c:d:e:_)
     | sameSuit          = Flush (value e)
     | vc == [1, 1, 3]   = Three (value c)
     | vc == [1, 2, 2]   = Dpair (value d)
-    | last vc == 2      = Pair  (onlyPairValue cs)
+    | last vc == 2      = Pair  (pairValue cs)
     | otherwise         = High  (value e)
     where vc = valueCounts cs
           sc = suitCounts cs
           sameSuit = length sc == 1
 
-consecutive :: Hand -> Bool
-consecutive (a:[]) = True
+consecutive :: [Card] -> Bool
+consecutive (_:[]) = True
 consecutive cs@(a:b:_)
-    | value b == value a + 1 = consecutive $ drop 1 cs
+    | value b == value a + 1 = consecutive $ tail cs
     | otherwise              = False
 
 valueCounts :: Hand -> [Int]
@@ -113,8 +122,10 @@ valueCounts = sort . map length . group . map value
 suitCounts :: Hand -> [Int]
 suitCounts = sort . map length . group . map suit
 
-onlyPairValue :: Hand -> Int
-onlyPairValue cs = value . fst . head . filter (\(x, y) -> value x == value y) . zip cs $ tail cs
+pairValue :: [Card] -> Int
+pairValue cs@(a:b:_)
+    | value a == value b  = value a
+    | otherwise           = pairValue (tail cs)
 
 readValue :: String -> Value
 readValue "A" = 14
@@ -125,7 +136,7 @@ readValue "T" = 10
 readValue num = read num
 
 readCard :: String -> Card
-readCard cs = Card (readValue $ take 1 cs) (read $ drop 1 cs)
+readCard cs = Card (readValue $ take 1 cs) (read $ tail cs)
 
 makeHands :: [Card] -> (Hand, Hand)
 makeHands = (sort . take 5) &&& (sort . drop 5)
@@ -139,4 +150,4 @@ games = map makeHands . map (map readCard . words) $ lines contents
 firstWins :: (Hand, Hand) -> Bool
 firstWins (h1, h2)
     | rank h1 /= rank h2  = rank h1 > rank h2
-    | otherwise           = map value h1 > map value h2
+    | otherwise           = reverse (map value h1) > reverse (map value h2)
