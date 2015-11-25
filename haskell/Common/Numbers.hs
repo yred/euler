@@ -4,6 +4,7 @@ module Common.Numbers
 , factors
 , factorsUpTo
 , isPrime
+, iSqrt
 , primes
 , primesDownFrom
 , primesUpTo
