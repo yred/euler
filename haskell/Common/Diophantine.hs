@@ -1,5 +1,7 @@
 module Common.Diophantine
 ( continuedFraction
+, diophantineSolutions
+, sqrtConvergents
 ) where
 
 import Control.Arrow
@@ -31,3 +33,24 @@ periodicSeq n seq fs@(f:_)
 
 real :: (Integral a, Floating b) => Ratio a -> b
 real = (uncurry (/)) . (fromIntegral . numerator &&& fromIntegral . denominator)
+
+
+sqrtConvergents :: Integral a => a -> [Ratio a]
+sqrtConvergents n = map ((asFrac n' +) . (sqrtFrac 0) . reverse) . map (flip take (cycle pseq)) $ [0..]
+    where
+        (n', pseq) = continuedFraction n
+
+
+asFrac :: Integral a => a -> Ratio a
+asFrac n = n % 1
+
+
+sqrtFrac :: Integral a => Ratio a -> [a] -> Ratio a
+sqrtFrac r []     = r
+sqrtFrac r (n:n') = let r' = 1/(asFrac n + r) in sqrtFrac r' n'
+
+
+diophantineSolutions :: Integral a => a -> a -> [(a, a)]
+diophantineSolutions n m = filter solves . map (numerator &&& denominator) $ sqrtConvergents n
+    where
+        solves (x, y) = x*x - n*y*y == m
