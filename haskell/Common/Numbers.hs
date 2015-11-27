@@ -63,8 +63,15 @@ primesDownFrom n = filter prime numbers ++ reverse factors
 
 isPrime :: Integral a => a -> Bool
 isPrime n
-    | n < 2     = False
-    | otherwise =  all ((/=0) . (mod n)) $ takeWhile (<=(iSqrt n)) primes
+    | n <= 2          = n == 2
+    | n `mod` 2 == 0  = False
+    | otherwise       = let n' = iSqrt n in isPrime' n [3,5..n']
+
+isPrime' :: Integral a => a -> [a] -> Bool
+isPrime' _ []     = True
+isPrime' n (x:xs)
+    | n `mod` x == 0 = False
+    | otherwise      = isPrime' n xs
 
 iSqrt :: Integral a => a -> a
 iSqrt = floor . sqrt . fromIntegral
