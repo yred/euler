@@ -31,4 +31,4 @@ limit :: (Num a) => a
 limit = 10^6
 
 primes :: [Int]
-primes = primesUpTo . floor . sqrt $ limit
+primes = primesUpTo . ceiling . sqrt $ limit
