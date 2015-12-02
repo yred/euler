@@ -14,31 +14,36 @@
 -- Find the value of n, 1 < n < 10^7, for which φ(n) is a permutation of n and the
 -- ratio n/φ(n) produces a minimum.
 import Control.Arrow
-import Data.List      (sort)
+import Data.List      ((\\))
 
-import Common.Numbers (primesUpTo)
+import Common.Numbers (iSqrt , primesUpTo)
 
 
 main = putStrLn $ show solution
 
 solution :: Int
-solution = snd . minimum . map h . filter g . map f . takeWhile ((<limit) . fst) . nfactors $ primes
+solution = snd . minimum . map withRatio . filter isPermutation . map withTotient $ nfPairs
+    where
+        nfPairs = takeWhile ((<limit) . fst) . nfactors $ primes
 
-type Factors = [(Int, Int)]
+type Factor = (Int, Int)
 
 limit :: Int
 limit = 10^7
 
-primes :: [Int]
-primes = primesUpTo limit
+primelimit :: Int
+primelimit = 5 * iSqrt limit
 
-nfactors :: [Int] -> [(Int, Factors)]
-nfactors []        = []
+primes :: [Int]
+primes = primesUpTo primelimit
+
+nfactors :: [Int] -> [(Int, [Factor])]
+nfactors []     = []
 nfactors (p:p') = (p, [(p, 1)]) : coalesce (nfactors' p 1 fs) fs
     where
         fs = nfactors p'
 
-nfactors' :: Int -> Int -> [(Int, Factors)] -> [(Int, Factors)]
+nfactors' :: Int -> Int -> [(Int, [Factor])] -> [(Int, [Factor])]
 nfactors' p m fs = power p (m+1) : coalesce (map times fs) (nfactors' p (m+1) fs)
     where
         times = (p^m *) *** ((p, m) :)
@@ -51,25 +56,23 @@ coalesce xs@(x:x') ys@(y:y')
     | x > y     = y : coalesce xs y'
     | otherwise = x : coalesce x' y'
 
-power :: Int -> Int -> (Int, Factors)
+power :: Int -> Int -> (Int, [Factor])
 power p m = (p^m, [(p, m)])
 
-f :: (Int, Factors) -> (Int, Int)
-f (n, fs) = (n, φ fs)
+withTotient :: (Int, [Factor]) -> (Int, Int)
+withTotient = id *** φ
 
-g :: (Int, Int) -> Bool
-g (a, b) = key a == key b
-    where
-        key = sort . show
+isPermutation :: (Int, Int) -> Bool
+isPermutation = null . uncurry (\\) . (show *** show)
 
-h :: (Int, Int) -> (Float, Int)
-h (a, b) = (fa/fb, a)
-    where
-        fa = fromIntegral a
-        fb = fromIntegral b
+withRatio :: (Int, Int) -> (Float, Int)
+withRatio = ratio &&& fst
 
-φ :: Factors -> Int
+ratio :: (Int, Int) -> Float
+ratio = uncurry (/) . (fromIntegral *** fromIntegral)
+
+φ :: [Factor] -> Int
 φ = product . map φ'
 
-φ' :: (Int, Int) -> Int
+φ' :: Factor -> Int
 φ' (p, m) = p^(m - 1) * (p - 1)
