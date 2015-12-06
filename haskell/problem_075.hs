@@ -20,7 +20,6 @@
 --
 -- Given that L is the length of the wire, for how many values of L ≤ 1,500,000
 -- can exactly one integer sided right angle triangle be formed?
-import Control.Arrow
 import Data.Map       (elems, fromListWith)
 
 import Common.Numbers (iSqrt)
@@ -29,7 +28,7 @@ import Common.Numbers (iSqrt)
 main = print solution
 
 solution :: Int
-solution = length . filter (==1) . elems . fromListWith (+) . map (id &&& const 1) $ allPerimeters
+solution = length . filter (==1) . elems . fromListWith (+) $ zip allPerimeters [1,1..]
 
 limit :: Int
 limit = 1500000
