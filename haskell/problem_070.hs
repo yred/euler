@@ -16,7 +16,8 @@
 import Control.Arrow
 import Data.List      ((\\))
 
-import Common.Numbers (iSqrt , primesUpTo)
+import Common.Numbers (Factor, iSqrt , primesUpTo, φ)
+import Common.Utils   (coalesce)
 
 
 main = putStrLn $ show solution
@@ -25,8 +26,6 @@ solution :: Int
 solution = snd . minimum . map withRatio . filter isPermutation . map withTotient $ nfPairs
     where
         nfPairs = takeWhile ((<limit) . fst) . nfactors $ primes
-
-type Factor = (Int, Int)
 
 limit :: Int
 limit = 10^7
@@ -48,14 +47,6 @@ nfactors' p m fs = power p (m+1) : coalesce (map times fs) (nfactors' p (m+1) fs
     where
         times = (p^m *) *** ((p, m) :)
 
-coalesce :: Ord a => [a] -> [a] -> [a]
-coalesce xs [] = xs
-coalesce [] ys = ys
-coalesce xs@(x:x') ys@(y:y')
-    | x < y     = x : coalesce x' ys
-    | x > y     = y : coalesce xs y'
-    | otherwise = x : coalesce x' y'
-
 power :: Int -> Int -> (Int, [Factor])
 power p m = (p^m, [(p, m)])
 
@@ -70,9 +61,3 @@ withRatio = ratio &&& fst
 
 ratio :: (Int, Int) -> Float
 ratio = uncurry (/) . (fromIntegral *** fromIntegral)
-
-φ :: [Factor] -> Int
-φ = product . map φ'
-
-φ' :: Factor -> Int
-φ' (p, m) = p^(m - 1) * (p - 1)

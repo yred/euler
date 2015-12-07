@@ -1,5 +1,6 @@
 module Common.Numbers
-( digits
+( Factor
+, digits
 , divisors
 , factors
 , factorsUpTo
@@ -8,9 +9,13 @@ module Common.Numbers
 , primes
 , primesDownFrom
 , primesUpTo
+, φ
 ) where
 
 import qualified Data.Char as Char
+
+
+type Factor = (Int, Int)
 
 
 divisors :: Integral a => a -> [a]
@@ -78,3 +83,9 @@ iSqrt = floor . sqrt . fromIntegral
 
 digits :: (Show a, Integral a, Integral b) => a -> [b]
 digits = map (fromIntegral . Char.digitToInt) . show
+
+φ :: [Factor] -> Int
+φ = product . map φ'
+
+φ' :: Factor -> Int
+φ' (p, m) = p^(m - 1) * (p - 1)
