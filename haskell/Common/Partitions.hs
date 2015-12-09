@@ -2,33 +2,26 @@ module Common.Partitions
 ( partitions
 ) where
 
-import Control.Arrow
-
 
 partitions :: [Integer]
-partitions = 1 : 1 : (partitions' 2 [1, 1])
+partitions = 1 : 1 : (partitions' [1, 1])
 
-partitions' :: Integer -> [Integer] -> [Integer]
-partitions' n ps = p : partitions' (n+1) (ps ++ [p])
+partitions' :: [Integer] -> [Integer]
+partitions' ps = p : partitions' (p : ps)
     where
-        p = f n ps
+        p = nextP ps
 
-f :: Integer -> [Integer] -> Integer
-f n ps = sum . zipWith (*) (cycle [1, -1])
-             . map (uncurry (+))
-             . map (g *** g)
-             . takeWhile ((>=0) . fst)
-             $ map (ixA n &&& ixB n) [1..n]
+nextP :: [Integer] -> Integer
+nextP ps = sum . concat
+               . map (zipWith (*) coeffs . map getP . takeWhile (<=n) . flip map [1..])
+               $ [ix, iy]
     where
-        g = flip h ps
+        n      = length ps
+        getP   = head . flip drop ps . pred
+        coeffs = cycle [1, -1]
 
-h :: Integer -> [Integer] -> Integer
-h n ps
-    | n < 0     = 0
-    | otherwise = ps !! (fromIntegral n)
+ix :: Integral a => a -> a
+ix k = k*(3*k - 1) `div` 2
 
-ixA :: Integer -> Integer -> Integer
-ixA n k = n - k*(3*k - 1) `div` 2
-
-ixB :: Integer -> Integer -> Integer
-ixB n k = n - k*(3*k + 1) `div` 2
+iy :: Integral a => a -> a
+iy k = k*(3*k + 1) `div` 2
