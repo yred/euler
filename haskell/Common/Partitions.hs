@@ -1,15 +1,28 @@
 module Common.Partitions
 ( partitions
+, partitionsWith
 ) where
 
 
 partitions :: [Integer]
-partitions = 1 : 1 : (partitions' [1, 1])
+partitions = seed ++ partitions' seed
+    where
+        seed = [1, 1]
 
 partitions' :: [Integer] -> [Integer]
 partitions' ps = p : partitions' (p : ps)
     where
         p = nextP ps
+
+partitionsWith :: (Integer -> Integer) -> [Integer]
+partitionsWith f = seed ++ partitionsWith' f seed
+    where
+        seed = map f [1, 1]
+
+partitionsWith' :: (Integer -> Integer) -> [Integer] -> [Integer]
+partitionsWith' f ps = p : partitionsWith' f (p : ps)
+    where
+        p = f $ nextP ps
 
 nextP :: [Integer] -> Integer
 nextP ps = sum . concat
