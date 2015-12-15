@@ -15,67 +15,67 @@
 -- moving right and down.
 import Control.Arrow    ((&&&))
 import Data.Map         (fromListWith, toList)
-import Data.Maybe       (fromJust, isJust)
+import Data.Maybe       (fromJust, mapMaybe)
 import System.IO.Unsafe (unsafePerformIO)
 
 
 main = print solution
 
 solution :: Int
-solution = bestPath $ getNode 0 0
+solution = bestPath . fromJust $ getNode 0 0
 
-data Point = Point {row :: Int, col :: Int} deriving (Show, Eq, Ord)
-data Node = Node {point :: Point, cost :: Int} deriving (Show, Eq, Ord)
+data Node = Node {row :: Int, col :: Int, value :: Int} deriving (Show, Eq, Ord)
 
 toNode :: Int -> Int -> Int -> Node
-toNode r c v = Node{point=Point{row=r, col=c}, cost=v}
+toNode r c v = Node{row=r, col=c, value=v}
 
-rowN :: Node -> Int
-rowN = row . point
-
-colN :: Node -> Int
-colN = col . point
+point :: Node -> (Int, Int)
+point = (row &&& col)
 
 contents :: String
 contents = unsafePerformIO $ readFile "../resources/p081_matrix.txt"
 
-matrix :: [[Node]]
-matrix = zipWith f [0..] . map (map read . words) $ lines contents
-    where
-        f r values = zipWith (toNode r) [0..] values
+substitute :: Char -> Char -> String -> String
+substitute a b = map (\c -> if c /= a then c else b)
 
-getNode :: Int -> Int -> Node
-getNode r c = (matrix !! r) !! c
+matrix :: [[Node]]
+matrix = zipWith rowNodes [0..] . map (map read . words . substitute ',' ' ') $ lines contents
+    where
+        rowNodes r values = zipWith (toNode r) [0..] values
+
+maxRow :: Int
+maxRow = length matrix - 1
+
+maxCol :: Int
+maxCol = length (matrix !! 0) - 1
+
+getNode :: Int -> Int -> Maybe Node
+getNode r c
+    | r <= maxRow && c <= maxCol = Just $ matrix !! r !! c
+    | otherwise                  = Nothing
 
 right :: Node -> Maybe Node
-right n
-    | colN n < cols = Just $ getNode (rowN n) (colN n + 1)
-    | otherwise     = Nothing
-    where
-        cols = length (matrix !! 0) - 1
+right n = getNode (row n) (col n + 1)
 
-down :: Node -> Maybe Node
-down n
-    | rowN n < rows = Just $ getNode (rowN n + 1) (colN n)
-    | otherwise     = Nothing
-    where
-        rows = length matrix - 1
+down  :: Node -> Maybe Node
+down n  = getNode (row n + 1) (col n)
 
-add :: (Node -> Maybe Node) -> Node -> Maybe Node
-add f n
-    | isJust n' = let n_ = fromJust n' in Just Node{point=point n_, cost=cost n + cost n_}
-    | otherwise = Nothing
+go :: (Node -> Maybe Node) -> Node -> Maybe Node
+go f n =
+    case new of
+         Just n' -> Just $ n' {value=value n + value n'}
+         Nothing -> Nothing
     where
-        n' = f n
+        new = f n
 
 bestPath :: Node -> Int
 bestPath n = bestPath' [n]
 
 bestPath' :: [Node] -> Int
 bestPath' ns
-    | null new  = cost $ head ns
+    | null new  = value $ head ns
     | otherwise = bestPath' new
     where
-        rs  = map fromJust . filter isJust $ map (add right) ns
-        ds  = map fromJust . filter isJust $ map (add down) ns
-        new = map (\(p, c) -> Node{point=p, cost=c}) . toList . fromListWith min . map (point &&& cost) $ rs ++ ds
+        rs  = mapMaybe (go right) ns
+        ds  = mapMaybe (go down) ns
+        new = map (\((r, c), v) -> toNode r c v) . toList . fromListWith min . map (point &&& value) $ rs ++ ds
