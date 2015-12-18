@@ -5,36 +5,45 @@
 --
 -- Although there exists no rectangular grid that contains exactly two million
 -- rectangles, find the area of the grid with the nearest solution.
-import Control.Arrow    ((&&&), (***))
+import Control.Arrow    ((&&&))
 
 
 main = print solution
 
-solution :: Integer
-solution = snd . minimum $ f
+solution :: Int
+solution = area . snd . minimum . concat . map withDeltas . takeWhile noOverlap . map candidate $ [1..]
+    where
+        candidate len = closest len 1 maxdim
+        noOverlap (Rectangle l w) = l < w
 
-rectangles :: Integer -> Integer -> Integer
-rectangles l w = sum $ [l' * w' | l' <- [1..l], w' <- [1..w]]
+data Rectangle = Rectangle Int Int deriving (Show, Eq, Ord)
 
-target :: Integer
+area :: Rectangle -> Int
+area (Rectangle l w) = l*w
+
+rectCount :: Rectangle -> Int
+rectCount (Rectangle l w) = sum [l' * w' | l' <- [1..l], w' <- [1..w]]
+
+target :: Int
 target = 2 * 10^6
 
-maxdim :: Integer
-maxdim = head . dropWhile ((<target) . rectangles 1) $ [1..]
+maxdim :: Int
+maxdim = head . dropWhile ((<target) . rectCount . Rectangle 1) $ [1..]
 
-f :: [(Integer, Integer)]
-f = concat . map k . takeWhile h . map (id &&& g') $ [1..]
+closest :: Int -> Int -> Int -> Rectangle
+closest l wmin wmax
+    | wmax - wmin <= 1  = Rectangle l wmin
+    | otherwise         = uncurry (closest l) $ narrowDown l wmin wmax
+
+narrowDown :: Int -> Int -> Int -> (Int, Int)
+narrowDown l wmin wmax
+    | rectCount rect > target = (wmin, wmid)
+    | otherwise               = (wmid, wmax)
     where
-        h = uncurry (<) . (id *** fst)
-        g' a = g a 1 maxdim
+        wmid = (wmin + wmax) `div` 2
+        rect = Rectangle l wmid
 
-g :: Integer -> Integer -> Integer -> (Integer, Integer)
-g a bmin bmax
-    | bmax - bmin <= 1  = (bmin, bmax)
-    | otherwise         = let mid = (bmin + bmax) `div` 2
-                          in  if   rectangles a mid > target
-                              then g a bmin mid
-                              else g a mid bmax
-
-k :: (Integer, (Integer, Integer)) -> [(Integer, Integer)]
-k (a, (b, c)) = map (abs . (target -) . rectangles a &&& (*a)) $ [b, c]
+withDeltas :: Rectangle -> [(Int, Rectangle)]
+withDeltas (Rectangle l w) = map ((delta &&& id) . Rectangle l) [w, w+1]
+    where
+        delta = abs . (target -) . rectCount
