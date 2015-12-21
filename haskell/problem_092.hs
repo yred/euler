@@ -13,24 +13,28 @@
 -- at 1 or 89.
 --
 -- How many starting numbers below ten million will arrive at 89?
-import Control.Arrow                ((***))
-import qualified Data.IntMap as M
-import Data.IntSet                  (IntSet, fromList, member, toList, union)
+import Control.Arrow    ((***))
+import Data.List        (sort)
+import Data.IntSet      (IntSet, fromList, member, toList, union)
 
-import Common.Numbers               (digits)
+import Common.Numbers   (digits)
 
 
 main = print solution
 
 solution :: Int
-solution = length . filter (==89) . map ((memo M.!) . sdsum) $ [1..limit]
+solution = length . filter (==89) . map ((memo !!) . sdsum) $ [1..limit]
+
+maxlen :: Int
+maxlen = 7
 
 limit :: Int
-limit = 10^7 - 1
+limit = 10^maxlen - 1
 
-memo :: M.IntMap Int
-memo = M.fromList . unpack . foldl (flip chain) sets $ [1..1000]
+memo :: [Int]
+memo =  (0 :) . map snd . sort . unpack . foldl (flip addChain) sets $ [1..maxsum]
     where
+        maxsum = maxlen * 9^2
         sets   = (fromList [1], fromList [89])
         pair n = flip zip (repeat n) . toList
         unpack = uncurry (++) . (pair 1 *** pair 89)
@@ -38,11 +42,11 @@ memo = M.fromList . unpack . foldl (flip chain) sets $ [1..1000]
 sdsum :: Int -> Int
 sdsum = sum . map (^2) . digits
 
-chain :: Int -> (IntSet, IntSet) -> (IntSet, IntSet)
-chain n sets = chain' [n] sets
+addChain :: Int -> (IntSet, IntSet) -> (IntSet, IntSet)
+addChain n sets = addChain' [n] sets
 
-chain' :: [Int] -> (IntSet, IntSet) -> (IntSet, IntSet)
-chain' ns@(n:_) (s01, s89)
+addChain' :: [Int] -> (IntSet, IntSet) -> (IntSet, IntSet)
+addChain' ns@(n:_) (s01, s89)
     | n `member` s01 = (s01 `union` (fromList ns), s89)
     | n `member` s89 = (s01, s89 `union` (fromList ns))
-    | otherwise      = let n' = sdsum n in chain' (n':ns) (s01, s89)
+    | otherwise      = let n' = sdsum n in addChain' (n':ns) (s01, s89)
