@@ -10,23 +10,29 @@
 -- Find the sum of the perimeters of all almost equilateral triangles with
 -- integral side lengths and area and whose perimeters do not exceed one billion
 -- (1,000,000,000).
-import Common.Numbers (iSqrt)
+import Common.Utils (coalesce)
 
 
 main = print solution
 
 solution :: Integer
-solution = sum . concat $ map perimeters [2..limit]
+solution = sum . map perimeter . flip match squares $ coalesce xs ys
+    where
+        ns = [2..limit]
+        f (a, b) = (a*a - b*b, a, b)
+        xs = map (\n -> f (2*n - 1, n)) ns
+        ys = map (\n -> f (2*n + 1, n)) ns
+        perimeter (a, b) = 2*(a + b)
 
 limit :: Integer
 limit = (10^9) `div` 6
 
-isSquare :: Integer -> Bool
-isSquare n = let n' = iSqrt n in n'^2 == n
+squares :: [Integer]
+squares = map (^2) [1..]
 
-perimeters :: Integer -> [Integer]
-perimeters n = map perimeter . filter integralArea . map equilateralSide $ [1, -1]
-    where
-        equilateralSide delta = 2*n + delta
-        integralArea side     = isSquare (side*side - n*n)
-        perimeter side        = 2*side + 2*n
+match :: Ord a => [(a, a, a)] -> [a] -> [(a, a)]
+match [] _ = []
+match xs@((i, j, k):x') ys@(y:y')
+    | i == y    = (j, k) : match x' y'
+    | i < y     = match x' ys
+    | otherwise = match xs y'
