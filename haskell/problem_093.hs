@@ -23,6 +23,7 @@
 -- as a string: abcd.
 import Control.Arrow ((&&&))
 import Data.List     (nub, permutations, sort)
+import Data.Ratio    (Rational, denominator, numerator)
 
 import Common.Sets   (combinations, combinationsWithR)
 
@@ -33,14 +34,14 @@ solution :: String
 solution = snd . maximum $ map (f &&& fmt) digits
     where
         f = maxConsecutive . express
-        fmt = concat . map show
+        fmt = concat . map (show . numerator) . sort
 
-data Op = Op { name :: String, fn :: (Int -> Int -> Int) }
+data Op = Op { name :: String, fn :: (Rational -> Rational -> Rational) }
 
 instance Eq Op where
     x == y = name x == name y
 
-digits :: [[Int]]
+digits :: [[Rational]]
 digits = combinations [1..9] 4
 
 ops :: [[Op]]
@@ -49,22 +50,23 @@ ops = nub . concat . map permutations $ combinationsWithR [add, sub, mul, dvd] 3
         add = Op { name="add", fn=(+) }
         sub = Op { name="sub", fn=(-) }
         mul = Op { name="mul", fn=(*) }
-        dvd = Op { name="dvd", fn=(\a b -> if b == 0 then 10^9 else a `div` b) }
+        dvd = Op { name="dvd", fn=(\a b -> if b == 0 then 10^9 else a/b) }
 
-express :: [Int] -> [Int]
-express ns = nub . concat . map f $ permutations ns
+express :: [Rational] -> [Integer]
+express = nub . map numerator . filter isInt . concat . map f . permutations
     where
         f = concat . zipWith apply ops . repeat
+        isInt = (==1) . denominator
 
-apply :: [Op] -> [Int] -> [Int]
+apply :: [Op] -> [Rational] -> [Rational]
 apply [f,g,h] [a,b,c,d] = [x,y]
     where
         [f',g',h'] = map fn [f,g,h]
-        x = h' d $ g' c $ f' a b
-        y = h' (g' c d) (f' a b)
+        x = f' (g' (h' a b) c) d
+        y = f' (g' a b) (h' c d)
 
-maxConsecutive :: [Int] -> Int
+maxConsecutive :: [Integer] -> Integer
 maxConsecutive = fst . last . takeWhile (uncurry (==)) . zip [0..] . zero . dropWhile (<0) . sort
 
-zero :: [Int] -> [Int]
+zero :: [Integer] -> [Integer]
 zero ns = if head ns == 0 then ns else 0 : ns
