@@ -28,7 +28,7 @@
 -- {4, 6, 8, 12, 15, 16}, the sum is 61.
 --
 -- What is the sum of all the minimal product-sum numbers for 2 ≤ k ≤ 12000?
-import Data.List (sort)
+import Data.List (nub, sort)
 import qualified Data.Map as M
 import qualified Data.Set as S
 
@@ -38,28 +38,37 @@ import Common.Numbers (divisorPairs, primesUpTo)
 main = print solution
 
 solution :: Int
-solution = M.size $ foldl f M.empty [2..nlimit]
+solution = sum . nub $ map (psumSets M.!) [2..limit]
+    where
+        allProds = foldl addPs M.empty [2..plimit]
+        psumSets = M.fromListWith min . concat . map withSizes . M.toList $ allProds
 
 type Products = S.Set [Int]
 
 singleton :: Int -> Products
-singleton = S.fromList . (:[]) . (:[])
+singleton = S.singleton . (:[])
 
 limit :: Int
 limit = 12000
 
-nlimit :: Int
-nlimit = floor . (1.1*) . fromIntegral $ limit
+plimit :: Int
+plimit = floor . (1.1*) . fromIntegral $ limit
 
 primes :: S.Set Int
-primes = S.fromList $ primesUpTo nlimit
+primes = S.fromList $ primesUpTo plimit
 
 divisors' :: Int -> [(Int, Int)]
 divisors' = tail . divisorPairs
 
-f :: M.Map Int Products -> Int -> M.Map Int Products
-f ps n | n `S.member` primes = M.insert n (singleton n) ps
-       | otherwise           = M.insert n (S.unions . map (g ps) . divisors' $ n) ps
+addPs :: M.Map Int Products -> Int -> M.Map Int Products
+addPs curr n | n `S.member` primes = M.insert n (singleton n) curr
+             | otherwise           = let ps = S.unions . map (addPs' curr) $ divisors' n
+                                     in  M.insert n ps curr
 
-g :: M.Map Int Products -> (Int, Int) -> Products
-g ps (d,d') = S.fromList . map (sort . (d:)) . S.toList $ ps M.! d'
+addPs' :: M.Map Int Products -> (Int, Int) -> Products
+addPs' ps (d,d') = S.fromList . map (sort . (d:)) . ([d']:) . S.toList $ ps M.! d'
+
+withSizes :: (Int, Products) -> [(Int, Int)]
+withSizes (k, ps) = map f . filter ((k>=) . sum) . S.toList $ ps
+    where
+        f p = (length p + k - sum p, k)
