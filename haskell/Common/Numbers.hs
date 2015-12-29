@@ -2,6 +2,7 @@ module Common.Numbers
 ( Factor
 , digits
 , divisors
+, divisorPairs
 , factors
 , factorsUpTo
 , isPrime
