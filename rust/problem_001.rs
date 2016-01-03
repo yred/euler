@@ -10,13 +10,6 @@ fn main() {
 }
 
 fn solution() -> i32 {
-    let mut msum = 0;
-
-    for n in 1..1000 {
-        if n % 3 == 0 || n % 5 == 0 {
-            msum += n;
-        }
-    }
-
-    msum
+    (1..1000).filter(|&n| n % 3 == 0 || n % 5 == 0)
+             .fold(0, |sum, n| sum + n)
 }
