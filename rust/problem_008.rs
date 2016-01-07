@@ -61,6 +61,7 @@ fn solution() -> u64 {
     let max_start = digits.len() - num_elems;
 
     (0..(max_start+1))
-        .map(|ix| digits.iter().skip(ix).take(num_elems).fold(1, |prod, d| prod*d))
+        .map(|ix| digits.iter().skip(ix).take(num_elems).fold(1, |product, d| product*d))
         .max()
+        .unwrap()
 }
