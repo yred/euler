@@ -15,18 +15,19 @@ fn main() {
 fn solution() -> i32 {
     let perimeter = 1000;
 
-    let min_a = (perimeter/3) + 1;
-    let max_a = perimeter - 2;
+    let min_c = (perimeter/3) + 1;
+    let max_c = perimeter - 3;
 
     let mut product = 0;
 
-    'outer: for a in min_a..(max_a + 1) {
-        let max_b = (perimeter - a)/2;
+    'outer: for c in min_c..(max_c + 1) {
+        let min_b = (perimeter - c)/2 + 1;
+        let max_b = perimeter - c - 1;
 
-        for b in 1..(max_b + 1) {
-            let c = perimeter - a - b;
+        for b in min_b..(max_b + 1) {
+            let a = perimeter - b - c;
 
-            if a*a == b*b + c*c {
+            if a*a + b*b == c*c {
                 product = a*b*c;
                 break 'outer;
             }
