@@ -108,7 +108,7 @@ fn main() {
     println!("{}", solution());
 }
 
-fn solution() -> &str {
+fn solution() -> String {
     let numstrs = vec![
         "37107287533902102798797998220837590246510135740250",
         "46376937677490009712648124896970078050417018260538",
@@ -212,10 +212,14 @@ fn solution() -> &str {
         "53503534226472524250874054075591789781264330331690",
     ];
 
-   // Complete...
+    let fst = numstrs[0].to_string();
+    let sum = numstrs[1..].iter()
+                          .fold(fst, |sum, nstr| add(sum, nstr.to_string()));
+
+    sum[..10].to_string()
 }
 
-fn add(a: &str, b: &str) -> &str {
+fn add(a: String, b: String) -> String {
     let digits_a = digits(a);
     let digits_b = digits(b);
 
@@ -237,13 +241,15 @@ fn add(a: &str, b: &str) -> &str {
         carry = dsum/10;
     }
 
-    let sumstr: String = "".to_owned();
+    if carry != 0 {
+        sum.push(carry);
+    }
+
     sum.iter()
        .rev()
-       .fold(sumstr, |mut acc, d| { acc.push_str(d.to_string().as_str()); acc })
-       .as_str()
+       .fold(String::new(), |mut acc, d| { acc.push_str(&*d.to_string()); acc })
 }
 
-fn digits(nstr: &str) -> Vec<u32> {
+fn digits(nstr: String) -> Vec<u32> {
     nstr.chars().rev().map(|c| c.to_digit(10).unwrap() as u32).collect()
 }
