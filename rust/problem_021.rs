@@ -28,15 +28,19 @@ fn solution() -> u32 {
             Some(_) => continue,
             None    => {
                 let b = d(a);
-                let c = d(b);
 
-                if c == a {
-                    aminums.push(a);
-                    aminums.push(b);
+                if a != b {
+                    let c = d(b);
+
+                    if c == a {
+                        aminums.push(a);
+                        aminums.push(b);
+                    }
+
+                    dvalues.insert(b, c);
                 }
 
                 dvalues.insert(a, b);
-                dvalues.insert(b, c);
             }
         }
     }
@@ -47,10 +51,10 @@ fn solution() -> u32 {
 }
 
 fn d(n: u32) -> u32 {
-    let upper = (n as f64).sqrt().floor() as u32;
+    let upper = n/2 + 1;
     let mut sum = 0;
 
-    for k in 1..(upper + 1) {
+    for k in 1..upper {
         if n % k == 0 {
             sum += k
         }
