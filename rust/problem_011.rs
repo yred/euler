@@ -28,7 +28,6 @@
 //
 // What is the greatest product of four adjacent numbers in the same direction
 // (up, down, left, right, or diagonally) in the 20x20 grid?
-use std::collections::HashMap;
 
 fn main() {
     println!("{}", solution());
@@ -63,13 +62,18 @@ fn solution() -> u32 {
                                        .collect::<Vec<_>>() })
                        .collect::<Vec<_>>();
 
-    println!("{}", max_row_product(&matrix, 4));
+    let max_hori = max_row_product(&matrix, 4);
 
     let t = transpose(&matrix);
-    println!("{}", max_row_product(&t, 4));
+    let max_vert = max_row_product(&t, 4);
 
-    let d1 = transpose(&diagonalize(&matrix));
-    println!("{}", max_row_product(&d1, 4));
+    let ld = transpose(&left_diagonalize(&matrix));
+    let max_ldgl = max_row_product(&ld, 4);
+
+    let rd = transpose(&right_diagonalize(&matrix));
+    let max_rdgl = max_row_product(&rd, 4);
+
+    *[max_hori, max_vert, max_ldgl, max_rdgl].iter().max().unwrap()
 }
 
 fn transpose(m: &Vec<Vec<u32>>) -> Vec<Vec<u32>> {
@@ -84,7 +88,7 @@ fn transpose(m: &Vec<Vec<u32>>) -> Vec<Vec<u32>> {
     t
 }
 
-fn diagonalize(m: &Vec<Vec<u32>>) -> Vec<Vec<u32>> {
+fn left_diagonalize(m: &Vec<Vec<u32>>) -> Vec<Vec<u32>> {
     let row_zeros = m[0].len() - 1;
     let mut diagm = vec![];
 
@@ -92,6 +96,21 @@ fn diagonalize(m: &Vec<Vec<u32>>) -> Vec<Vec<u32>> {
         let mut new_row = vec![0; ix];
         new_row.extend(row.iter());
         new_row.extend(vec![0; row_zeros - ix].iter());
+
+        diagm.push(new_row);
+    }
+
+    diagm
+}
+
+fn right_diagonalize(m: &Vec<Vec<u32>>) -> Vec<Vec<u32>> {
+    let row_zeros = m[0].len() - 1;
+    let mut diagm = vec![];
+
+    for (ix, row) in m.iter().enumerate() {
+        let mut new_row = vec![0; row_zeros - ix];
+        new_row.extend(row.iter());
+        new_row.extend(vec![0; ix].iter());
 
         diagm.push(new_row);
     }
