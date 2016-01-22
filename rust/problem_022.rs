@@ -41,6 +41,6 @@ fn get_name(vstr: Vec<u8>) -> String {
 }
 
 fn value(s: &str) -> u32 {
-    let zero = 'A' as u32 - 1;
-    s.bytes().fold(0, |sum, c| { sum + (c as u32 - zero) })
+    let zero = b'A' - 1;
+    s.bytes().fold(0, |sum, c| { sum + (c - zero) as u32 })
 }
