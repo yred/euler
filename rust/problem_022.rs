@@ -20,14 +20,27 @@ fn main() {
 
 fn solution() -> u32 {
     let file = match File::open("../resources/p022_names.txt") {
-        Ok(f) => f,
+        Ok(f)  => BufReader::new(f),
         Err(_) => panic!("Error opening file"),
     };
-    let file = BufReader::new(file);
 
-    let lines = file.lines()
-                    .map(|line| line.unwrap())
-                    .collect::<Vec<_>>();
+    let mut names = file.split(b',')
+                        .map(|res| get_name(res.unwrap()))
+                        .collect::<Vec<_>>();
 
-    lines.len() as u32
+    names.sort();
+
+    names.iter()
+         .enumerate()
+         .map(|(ix, name)| (ix as u32 + 1)*value(name))
+         .fold(0, |sum, score| sum + score)
+}
+
+fn get_name(vstr: Vec<u8>) -> String {
+    String::from_utf8(vstr).unwrap().trim_matches('"').to_string()
+}
+
+fn value(s: &str) -> u32 {
+    let zero = 'A' as u32 - 1;
+    s.bytes().fold(0, |sum, c| { sum + (c as u32 - zero) })
 }
