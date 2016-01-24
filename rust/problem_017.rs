@@ -22,7 +22,7 @@ fn solution() -> u32 {
         for c in in_words(n).chars() {
             letter_count += match c {
                 'a'...'z' => 1,
-                _           => 0,
+                _         => 0,
             };
         }
     }
