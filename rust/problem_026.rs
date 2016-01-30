@@ -24,14 +24,25 @@ fn main() {
     println!("{}", solution());
 }
 
-fn solution() -> u32 {
-    let mut xs = reciprocal(7, 50);
-    xs = xs.split_off(10);
+fn solution() -> usize {
+    let digits = 2100;
+    let mut cyclens = Vec::new();
 
-    least_frequent(&xs)
+    for n in 2..1000 {
+        let mut res = reciprocal(n, digits);
+
+        if res.len() == digits {
+            // the first few digits may be noisy
+            res = res.split_off(100);
+
+            cyclens.push((find_cycle_len(&res), n));
+        }
+    }
+
+    cyclens.iter().max().unwrap().1
 }
 
-fn reciprocal(n: u32, max_digits: u32) -> Vec<u32> {
+fn reciprocal(n: usize, max_digits: usize) -> Vec<usize> {
     let mut dividend = 1;
     let mut result = Vec::new();
 
@@ -49,7 +60,7 @@ fn reciprocal(n: u32, max_digits: u32) -> Vec<u32> {
     result
 }
 
-fn least_frequent(v: &Vec<u32>) -> u32 {
+fn least_frequent(v: &Vec<usize>) -> usize {
     let mut index = HashMap::new();
 
     for &elem in v {
@@ -68,4 +79,28 @@ fn least_frequent(v: &Vec<u32>) -> u32 {
 
     let &(_, elem) = counts.iter().min().unwrap();
     elem
+}
+
+fn find_cycle_len(v: &Vec<usize>) -> usize {
+    let lf_digit = least_frequent(v);
+
+    let mut start = 0;
+
+    for (ix, &digit) in v.iter().enumerate() {
+        if digit == lf_digit {
+            if start == 0 {
+                start = ix;
+                continue;
+            }
+
+            let length = ix - start;
+            let first  = &v[start..ix];
+
+            if v[ix..].chunks(length).all(|c| c.len() < length || c == first) {
+                return length;
+            }
+        }
+    }
+
+    0
 }
