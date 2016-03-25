@@ -63,6 +63,7 @@ def D(n):
 def solution():
     start = 5
     limit = 10**4 + 1
+
     return sum(D(n) for n in range(start, limit))
 
 

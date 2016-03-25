@@ -26,15 +26,11 @@ def solution():
     for p in primes_up_to(limit/2):
         if p*p < limit:
             factors.append(p)
-
-        if p*factors[-1] >= limit:
-            cut = 0
-            for n in reversed(factors):
-                if n*p < limit:
+        else:
+            for ix in reversed(range(len(factors))):
+                if p*factors[ix] < limit:
+                    factors = factors[:ix+1]
                     break
-                cut += 1
-
-            factors = factors[:-cut]
 
         spcount += len(factors)
 
