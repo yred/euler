@@ -36,7 +36,7 @@ def solution():
     maxprime = 100
 
     primes = list(primes_up_to(maxprime))
-    return count_hamming_numbers(1, maxnum, primes)
+    return count_hamming_numbers(1, maxnum, primes[::-1])
 
 
 if __name__ == '__main__':
