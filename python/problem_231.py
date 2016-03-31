@@ -9,43 +9,49 @@ So the sum of the terms in the prime factorisation of 10C3 is 14.
 
 Find the sum of the terms in the prime factorisation of 20000000C15000000.
 """
-from collections import Counter
+from collections import defaultdict
 
-from common import memoize, primes_up_to
-
-
-primes = primeset = None
+from common import primes_up_to
 
 
-@memoize
-def factors(n):
-    result = []
+class PrimeSet(object):
+    def __init__(self, maximum):
+        self._primes = list(primes_up_to(maximum))
+        self._primeset = set(self._primes)
+
+    def __contains__(self, n):
+        return n in self._primeset
+
+    def __iter__(self):
+        return iter(self._primes)
+
+
+def factors(n, primes):
 
     for p in primes:
         if n == 1:
-            break
+            return
 
-        if n in primeset:
-            result.append(n)
+        if n in primes:
+            yield n
             break
 
         while n % p == 0:
-            result.append(p)
+            yield p
             n /= p
 
-    return result
 
-
-def factorize_range_product(start, end):
+def factorize_range_product(start, end, primes):
     """
     Compute the prime factors of n = start * (start + 1) * ... * end
 
     Returns the result as a `Counter` object
     """
-    result = Counter()
+    result = defaultdict(int)
 
     for n in range(start, end + 1):
-        result.update(factors(n))
+        for p in factors(n, primes):
+            result[p] += 1
 
     return result
 
@@ -54,15 +60,11 @@ def solution():
     n = 20 * 10**6
     k = 15 * 10**6
 
-    global primes, primeset
-    primeset = set(primes_up_to(n))
-    primes = list(primeset)
+    primes = PrimeSet(n)
+    numer = factorize_range_product(k + 1, n, primes)
+    denom = factorize_range_product(1, n - k, primes)
 
-    numer = factorize_range_product(k + 1, n)
-    denom = factorize_range_product(1, n - k)
-    reduced = numer - denom
-
-    return sum(prime*multiplicity for prime, multiplicity in reduced.iteritems())
+    return sum(p*(numer[p] - denom[p]) for p in numer)
 
 
 if __name__ == '__main__':
