@@ -2,19 +2,44 @@ from itertools import count
 from math import sqrt, factorial
 
 
-def memoize(func):
-    """Returns a memoized version of `func`"""
-    data = {}
+def memoize(fn=None, ignore_kwargs=False):
+    """
+    Create a memoized version of a function.
 
-    def wrapped(*args, **kwargs):
-        key = tuple(list(args) + sorted(kwargs.items()))
+    Note: can be used:
 
-        if key not in data:
-            data[key] = func(*args, **kwargs)
+        - As a simple decorator:
 
-        return data[key]
+            @memoize
+            def do_x(a):
+                # ...
 
-    return wrapped
+        - In a customized manner:
+
+            @memoize(ignore_kwargs=True):
+            def do_y(b, c=True):
+                # ...
+    """
+    def wrapper(func):
+        data = {}
+
+        def wrapped(*args, **kwargs):
+            if ignore_kwargs:
+                key = tuple(list(args))
+            else:
+                key = tuple(list(args) + sorted(kwargs.items()))
+
+            if key not in data:
+                data[key] = func(*args, **kwargs)
+
+            return data[key]
+
+        return wrapped
+
+    if fn:
+        return wrapper(fn)
+    else:
+        return wrapper
 
 
 def gcd(a, b):
