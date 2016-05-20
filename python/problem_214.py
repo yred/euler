@@ -27,7 +27,7 @@ What is the sum of all primes less than 40000000 which generate a chain of lengt
 """
 from collections import defaultdict
 
-from common import primes_up_to
+from common import primes_up_to, OrderedSet
 
 
 def phi(factors):
@@ -39,12 +39,12 @@ def phi(factors):
     return result
 
 
-def decompose(n, primes, primeset):
+def decompose(n, primes):
     for p in primes:
         if n == 1:
             return
 
-        if n in primeset:
+        if n in primes:
             yield n
             break
 
@@ -57,8 +57,7 @@ def solution():
     target = 25
 
     limit = 40 * 10**6
-    primes = list(primes_up_to(limit))
-    primeset = set(primes)
+    primes = OrderedSet(primes_up_to(limit))
 
     totient, chainlen = {}, {}
 
@@ -75,7 +74,7 @@ def solution():
 
             if to not in totient:
                 factors = defaultdict(int)
-                for f in decompose(to, primes, primeset):
+                for f in decompose(to, primes):
                     factors[f] += 1
 
                 totient[to] = phi(factors)

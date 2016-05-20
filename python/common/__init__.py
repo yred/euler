@@ -192,3 +192,19 @@ def multicount(start, steps):
 def is_square(n):
     """Returns `True` if n is a perfect square"""
     return int(sqrt(n) + 0.5)**2 == n
+
+
+class OrderedSet(object):
+
+    def __init__(self, iterable):
+        self.values = list(iterable)
+        self.index = set(self.values)
+
+    def __getitem__(self, item):
+        return self.values[item]
+
+    def __iter__(self):
+        return iter(self.values)
+
+    def __contains__(self, value):
+        return value in self.index
