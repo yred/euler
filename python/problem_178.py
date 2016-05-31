@@ -16,16 +16,22 @@ from common import memoize
 
 
 @memoize
-def steps(d, target, min_d, max_d, count):
-    if d < min_d or d > max_d or abs(d - target) >= count:
+def step_count(d, target, min_d, max_d, length):
+    """
+    Returns the number of length`-digit step numbers, beginning with the digit
+    `d` and ending with `target`.
+
+    Digits must be between `min_d` and `max_d`.
+    """
+    if d < min_d or d > max_d or abs(d - target) >= length:
         return 0
 
-    if count == 1:
+    if length == 1:
         return 1
 
     return (
-        steps(d - 1, target, min_d, max_d, count - 1) +
-        steps(d + 1, target, min_d, max_d, count - 1)
+        step_count(d - 1, target, min_d, max_d, length - 1) +
+        step_count(d + 1, target, min_d, max_d, length - 1)
     )
 
 
@@ -42,26 +48,26 @@ def solution():
     # Form 1 numbers
     for numlen in range(minlen, maxlen + 1):
         for seglen in range(8, numlen - 1):
-            segcount = steps(1, 8, 1, 8, seglen)
+            segcount = step_count(1, 8, 1, 8, seglen)
 
             for rlen in range(1, numlen - seglen):
-                rcount = sum(steps(0, d, 0, 8, rlen) for d in range(9))
+                rcount = sum(step_count(0, d, 0, 8, rlen) for d in range(9))
 
                 llen = (numlen - seglen) - rlen
-                lcount = sum(steps(9, d, 0, 9, llen) for d in range(1, 10))
+                lcount = sum(step_count(9, d, 0, 9, llen) for d in range(1, 10))
 
                 count += (lcount * segcount * rcount)
 
     # Form 2 numbers
     for numlen in range(minlen + 1, maxlen + 1):
         for seglen in range(8, numlen - 2):
-            segcount = steps(1, 8, 1, 8, seglen)
+            segcount = step_count(1, 8, 1, 8, seglen)
 
             for rlen in range(1, numlen - seglen - 1):
-                rcount = sum(steps(9, d, 1, 9, rlen) for d in range(1, 10))
+                rcount = sum(step_count(9, d, 1, 9, rlen) for d in range(1, 10))
 
                 llen = (numlen - seglen - 1) - rlen
-                lcount = sum(steps(1, d, 0, 9, llen) for d in range(1, 10))
+                lcount = sum(step_count(1, d, 0, 9, llen) for d in range(1, 10))
 
                 count += (lcount * segcount * rcount)
 
