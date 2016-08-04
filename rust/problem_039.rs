@@ -13,6 +13,8 @@ fn main() {
 }
 
 fn solution() -> usize {
+    let pmax = 1000;
+
     let mut squares = HashMap::new();
     for n in 1..1000 {
         squares.insert(n*n, n);
@@ -20,12 +22,18 @@ fn solution() -> usize {
 
     let mut perimeters = HashMap::new();
 
-    for c in 2..1000 {
-        for a in 1..c {
+    // Note: a < b < c
+    for c in 2..pmax {
+        for a in 1..(c/2) {
             let bsq = c*c - a*a;
-            if bsq <= a*a && squares.contains_key(&bsq) {
+
+            if squares.contains_key(&bsq) {
                 let b = squares.get(&bsq).unwrap();
-                let p = a as usize + b + c;
+
+                let p: usize = a + b + c;
+                if p > pmax {
+                    break;
+                }
 
                 let new_count = match perimeters.get(&p) {
                     Some(count) => count + 1,
@@ -36,15 +44,5 @@ fn solution() -> usize {
         }
     }
 
-    let mut maxp = 0;
-    let mut maxc = 0;
-
-    for (&p, &c) in perimeters.iter() {
-        if c > maxc {
-            maxc = c;
-            maxp = p;
-        }
-    }
-
-    maxp
+    perimeters.iter().map(|(&p, &count)| (count, p)).max().unwrap().1
 }
