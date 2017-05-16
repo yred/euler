@@ -24,7 +24,7 @@ def memoize(fn=None, ignore_kwargs=False):
         data = {}
 
         def wrapped(*args, **kwargs):
-            if ignore_kwargs:
+            if ignore_kwargs or not kwargs:
                 key = tuple(list(args))
             else:
                 key = tuple(list(args) + sorted(kwargs.items()))
