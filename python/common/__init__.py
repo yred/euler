@@ -74,24 +74,24 @@ def primes_up_to(limit):
     """Yields all primes up to `limit`"""
     yield 2
 
-    maxindex = (limit - 1)/2
-    numbytes = maxindex/8
+    maxindex = (limit - 1)//2
+    numbytes = maxindex//8
     if maxindex % 8 != 0:
         numbytes += 1
     sieve = bytearray(numbytes)
 
     # Set "non-primes" to 1, using the sieve of Sundaram
-    for i in xrange(1, int(sqrt(limit/2)) + 1):
-        for j in xrange(1, (limit - i)/(1 + 2*i) + 1):
+    for i in range(1, int(sqrt(limit//2)) + 1):
+        for j in range(1, (limit - i)//(1 + 2*i) + 1):
             index = i + j + 2*i*j - 1
             if index >= maxindex:
                 break
 
-            sieve[index/8] |= 1 << (index % 8)
+            sieve[index//8] |= 1 << (index % 8)
 
     # Mark the sieve's "extra bits" as non-primes
     for k in range(maxindex, numbytes*8):
-        sieve[k/8] |= 1 << (k % 8)
+        sieve[k//8] |= 1 << (k % 8)
 
     for i, byte in enumerate(sieve):
         first = i*8 + 1
