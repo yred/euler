@@ -136,7 +136,7 @@ def divisor_pairs(n):
 
     for i in range(1, int(sqrt(n) + 1)):
         if n % i == 0:
-            yield i, n/i
+            yield i, n//i
 
 
 def product(ns):
